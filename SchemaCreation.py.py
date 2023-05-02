@@ -6,7 +6,7 @@ from pyspark.sql.types import *
 # COMMAND ----------
 
 spark = SparkSession.builder.appName("CreateDatabase").getOrCreate()
-
+spark.version
 
 # COMMAND ----------
 
@@ -17,10 +17,6 @@ db_name = "aden_bronze_database"
 
 bronze_db = spark.sql("CREATE DATABASE IF NOT EXISTS {}".format(db_name))
 
-
-# COMMAND ----------
-
-bronze_db.show(10)
 
 # COMMAND ----------
 
@@ -46,6 +42,7 @@ for table_name in table_list:
 
     # Create the table
     table_data.write.format("parquet").mode("overwrite").saveAsTable("aden_bronze_" + table_name[0])
+    table_data.show(10)
 
 
 # COMMAND ----------
@@ -53,52 +50,91 @@ for table_name in table_list:
 # Silver Conversion
 
 schema_list = [
-    [
-        StructType([StructField("payment_id", IntegerType(), False)]),
-        StructType([StructField("date", DateType(), False)]),
-        StructType([StructField("amount", DecimalType(10, 2), False)]),
-        StructType([StructField("rider_id", IntegerType(), False)])
-    ],
-    [
-        StructType([StructField("rider_id", IntegerType(), False)]),
-        StructType([StructField("first_name", StringType(), False)]),
-        StructType([StructField("last_name", StringType(), False)]),
-        StructType([StructField("address", StringType(), False)]),
-        StructType([StructField("birthday", DateType(), False)]),
-        StructType([StructField("account_start_date", DateType(), True)]),
-        StructType([StructField("account_end_date", DateType(), True)]),
-        StructType([StructField("is_member", BooleanType(), True)])
-    ],
-    [
-        StructType([StructField("trip_id", StringType(), False)]),
-        StructType([StructField("rideable_type", StringType(), False)]),
-        StructType([StructField("started_at", TimestampType(), False)]),
-        StructType([StructField("ended_at", TimestampType(), True)]),
-        StructType([StructField("start_station_id", IntegerType(), True)]),
-        StructType([StructField("end_station_id", IntegerType(), True)]),
-        StructType([StructField("rider_id", IntegerType(), True)])
-    ],
-    [
-        StructType([StructField("station_id", StringType(), False)]),
-        StructType([StructField("name", StringType(), False)]),
-        StructType([StructField("latitude", FloatType(), False)]),
-        StructType([StructField("longitude", FloatType(), False)])
-    ]
+    StructType([StructField("payment_id", IntegerType(),True),
+    StructField("date", DateType(), False),
+    StructField("amount", DecimalType(10, 2), False),
+    StructField("rider_id", IntegerType(), False)])
+    ,
+    StructType([StructField("rider_id", IntegerType(), False),
+    StructField("first_name", StringType(), False),
+    StructField("last_name", StringType(), False),
+    StructField("address", StringType(), False),
+    StructField("birthday", DateType(), False),
+    StructField("account_start_date", DateType(), True),
+    StructField("account_end_date", DateType(), True),
+    StructField("is_member", BooleanType(), True)])
+    ,
+    StructType([StructField("trip_id", StringType(), False),
+    StructField("rideable_type", StringType(), False),
+    StructField("started_at", TimestampType(), False),
+    StructField("ended_at", TimestampType(), True),
+    StructField("start_station_id", StringType(), True),
+    StructField("end_station_id", StringType(), True),
+    StructField("rider_id", IntegerType(), True)])
+    ,
+    StructType([StructField("station_id", StringType(), False),
+    StructField("name", StringType(), False),
+    StructField("latitude", FloatType(), False),
+    StructField("longitude", FloatType(), False)])
 ]
+# In the specification start_station_id and end_station_id are listed as int types however they are foreign keys referring to a varchar field in station_id which causes type conflicts. As such I have changed them to string type.
 
+# COMMAND ----------
+
+print(schema_list[1][0].name)
+
+# COMMAND ----------
+
+file_name = "/user/hive/warehouse/aden_bronze_database.db/aden_bronze_trips"
+table_data = spark.read.format("parquet") \
+    .option("header", False) \
+    .load(file_name)
+#table_data.show(3)
+df = table_data
+
+
+## Reading in data with schema created null values in all cells
+# Apply the new schema and cast the values
+for i, c in enumerate(df.columns):
+    df = df.withColumn(c, df[c].cast(schema_list[2][i].dataType)) \
+        .withColumnRenamed(df.columns[i], schema_list[2][i].name)
+
+df.show(10)
 
 # COMMAND ----------
 
 
-for i in range(4):
-    file_name = "/user/hive/warehouse/aden_bronze_database.db/aden_bronze_{}".format(table_list[i][0])
+
+# COMMAND ----------
+
+for j in range(4):
+    file_name = "/user/hive/warehouse/aden_bronze_database.db/aden_bronze_{}".format(table_list[j][0])
     table_data = spark.read.format("parquet") \
         .option("header", False) \
-        .schema(schema_list[i][0]) \
         .load(file_name)
+    table_data.show(3)
+    print("Before Write and After Write") 
+    ## Reading in data with schema created null values in all cells
+    # Apply the new schema and cast the values
+    for i, c in enumerate(table_data.columns):
+        new_type = schema_list[j][i]
+        print(new_type.dataType)
+        if isinstance(new_type.dataType, TimestampType):
+            table_data = table_data.withColumn(c, to_timestamp(table_data[c], "dd/MM/yyyy HH:mm"))
+            # If timestamp is not in this format will need to update code to handle it
+        else:
+            table_data = table_data.withColumn(c, table_data[c].cast(new_type.dataType))
+
+        table_data = table_data.withColumnRenamed(table_data.columns[i], new_type.name)
+    
     
     # Create the table
-    table_data.write.format("delta").mode("overwrite").option("mergeSchema", True).saveAsTable("aden_silver_" + table_list[i][0])
+    table_data.write.format("delta").mode("overwrite").option("overwriteSchema", True).saveAsTable("aden_silver_" + table_list[j][0])
+    table_data.show(3)
+
+
+# COMMAND ----------
+
 
 
 # COMMAND ----------
@@ -150,6 +186,22 @@ trip_df = spark.read.format("delta").option("header", True).load(trips_file_path
 stations_file_path = file_path + table_list[3][0]
 station_df = spark.read.format("delta").option("header", True).load(stations_file_path)
 
+
+# COMMAND ----------
+
+payment_df.show(10)
+
+# COMMAND ----------
+
+rider_df.show(10)
+
+# COMMAND ----------
+
+trip_df.show(10)
+
+# COMMAND ----------
+
+station_df.show(10)
 
 # COMMAND ----------
 
