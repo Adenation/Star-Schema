@@ -335,32 +335,4 @@ query_money_member.show(10)
 
 # COMMAND ----------
 
-# Query
-# EXTRA CREDIT - Analyze how much money is spent per member
-#   ● Based on how many rides the rider averages per month
-#   ● Based on how many minutes the rider spends on a bike per month
-
-#read query plz
-query_total_spend_per_member = transaction_fact.join(payments_dimension, 'payment_id') \
-    .join(rider_df, 'rider_id') \
-    .filter(col("is_member") == True) \
-    .groupBy("rider_id") \
-    .agg(sum(col('amount')))
-
-query_rides_average_per_month = trip_fact.join(rider_df, 'rider_id') \
-    .filter(col("is_member") == True) \
-    .groupBy("rider_id").count() \
-    .withColumn('months since joining', floor(datediff(current_date(), col("account_start_date")) / 12))
-
-query_money_member.show(10)
-query_rides_average_per_month.show(10)
-
-# COMMAND ----------
-
-tf = trip_fact.groupBy(col("rider_id")).count().sort(desc(col("count")))
-
-tf.show(100)
-
-# COMMAND ----------
-
 
