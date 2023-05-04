@@ -7,7 +7,7 @@ This project is designed to be imported into databricks and executed via a workf
 
 <details>
 <summary> Notebooks Snippet </summary>
-![image](https://user-images.githubusercontent.com/71145307/236331709-c78445fc-5b47-4ecf-a679-0a601b60f0f4.png)
+![Notebook Image](./img/DBFS Snip)
 </details>
 
 # Design
