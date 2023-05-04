@@ -9,7 +9,9 @@ This project is designed to be imported into databricks and executed via a workf
 <summary> Notebooks Snippet </summary>
 ![image](https://user-images.githubusercontent.com/71145307/236331709-c78445fc-5b47-4ecf-a679-0a601b60f0f4.png)
 </details>
+
 # Design
+
 <details>
 <summary> Visual Database Designs </summary>
 Conceptual Database Design
@@ -19,6 +21,7 @@ Logical Database Design
 Physical Database Design
 ![Physical Database Design](https://user-images.githubusercontent.com/71145307/236345494-c1ba720e-cf63-456c-ba21-b50b5d0c4bd7.png)
 </details>
+
 # Implementation
 
 There are six notebooks in the databricks workflow and four csvs in this repository
