@@ -8,13 +8,18 @@
 				"fileName": "data.csv"
 			}
 		},
+		"parameters": {
+			"fileName": {
+				"type": "string",
+				"defaultValue": "trips.csv"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "trips.csv",
-				"container": "landing"
+				"folderPath": "landing"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
