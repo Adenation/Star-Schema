@@ -1,0 +1,23 @@
+{
+	"name": "dim_payment",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adenAzureBlobStorage1",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"fileName": "data.csv"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "dim_payment",
+				"container": "gold"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
