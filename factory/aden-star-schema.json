@@ -1,0 +1,9 @@
+{
+	"name": "aden-star-schema",
+	"location": "eastus2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "7e612de3-67a1-44c8-986b-3f62e6025f52",
+		"tenantId": "ff1fc9e3-26ae-45ae-a79a-32197c30c04d"
+	}
+}
