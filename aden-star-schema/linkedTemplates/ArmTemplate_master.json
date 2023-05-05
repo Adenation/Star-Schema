@@ -1,0 +1,63 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "aden-star-schema"
+		},
+		"adenAzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'adenAzureBlobStorage1'"
+		},
+		"adenGitHub1_credential": {
+			"type": "secureString",
+			"metadata": "Secure string for 'credential' of 'adenGitHub1'"
+		},
+		"adenGitHub1_properties_typeProperties_username": {
+			"type": "string",
+			"defaultValue": "Adenation"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "aden-star-schema_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"adenAzureBlobStorage1_connectionString": {
+						"value": "[parameters('adenAzureBlobStorage1_connectionString')]"
+					},
+					"adenGitHub1_credential": {
+						"value": "[parameters('adenGitHub1_credential')]"
+					},
+					"adenGitHub1_properties_typeProperties_username": {
+						"value": "[parameters('adenGitHub1_properties_typeProperties_username')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

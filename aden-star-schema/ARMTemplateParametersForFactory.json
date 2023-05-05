@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "aden-star-schema"
+		},
+		"adenAzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"adenGitHub1_credential": {
+			"value": ""
+		},
+		"adenGitHub1_properties_typeProperties_username": {
+			"value": "Adenation"
+		}
+	}
+}
