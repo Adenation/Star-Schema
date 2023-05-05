@@ -606,6 +606,67 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/dataflow1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "bronze_stations",
+								"type": "DatasetReference"
+							},
+							"name": "stations"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "silver_stations",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "cast1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          {1} as string,",
+						"          {2} as string,",
+						"          {3} as string,",
+						"          {4} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> stations",
+						"stations cast(output(",
+						"          {1} as integer '000',",
+						"          {2} as date 'dd/MM/yyyy',",
+						"          {3} as decimal(10,0) '000,000,000.000',",
+						"          {4} as integer '000'",
+						"     ),",
+						"     errors: true) ~> cast1",
+						"cast1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/bronze_stations')]",
+				"[concat(variables('factoryId'), '/datasets/silver_stations')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Medallion-Basic')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -1057,6 +1118,37 @@
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "dataflow1",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"stations": {},
+									"sink1": {}
+								},
+								"linkedServiceParameters": {}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
 					}
 				],
 				"policy": {
@@ -1073,7 +1165,8 @@
 				"[concat(variables('factoryId'), '/datasets/stations')]",
 				"[concat(variables('factoryId'), '/datasets/bronze_stations')]",
 				"[concat(variables('factoryId'), '/datasets/trips')]",
-				"[concat(variables('factoryId'), '/datasets/bronze_trips')]"
+				"[concat(variables('factoryId'), '/datasets/bronze_trips')]",
+				"[concat(variables('factoryId'), '/dataflows/dataflow1')]"
 			]
 		}
 	]
