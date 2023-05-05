@@ -19,7 +19,9 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"folderPath": "landing"
+				"fileName": "*.csv",
+				"folderPath": "csvs",
+				"container": "landing"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

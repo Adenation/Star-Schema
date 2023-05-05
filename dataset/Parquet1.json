@@ -13,6 +13,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": "*.parquet",
+				"folderPath": "tables",
 				"container": "bronze"
 			},
 			"compressionCodec": "snappy"
