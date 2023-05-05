@@ -139,8 +139,17 @@ query_money_member = transaction_fact.join(payment_dimension, 'payment_id') \
 
 # COMMAND ----------
 
+# Testing Schemas
+# Issues reading from other notebooks
+#assert trip_fact.schema == trip_fact_schema, "Schema mismatch for trip_fact table"
+#assert trip_date_dimension.schema == trip_date_dimension_schema, "Schema mismatch for trip_date_dimension table"
 
+# Testing Queries
 
-# COMMAND ----------
+assert query_money_month.count() == 12, "Should only be 12 rows for the 12 months"
 
+assert query_money_year.count() == 10, "Should only be 10 rows for years 2013-2022"
 
+value = query_money_member.filter(col("age at joining") == 21).collect()
+assert value[0][0] == 21, "Most money spent should be by members who were 21 when they joined"
+assert value[0][1] == 495225.00, "Members at this age should have spent (currency)495,225.00"

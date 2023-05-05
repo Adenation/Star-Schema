@@ -18,8 +18,28 @@ data_path = folder_path + "landing/"
 
 # COMMAND ----------
 
-# Get Schemas from Schema Creation Notebook
-dbutils.notebook.run("/Repos/aden.victor@qualyfi.co.uk/Star-Schema/SchemaCreation", timeout_seconds=1800)
+
+# Set the path to the directory
+
+bronze_path = folder_path + "bronze/"
+
+# Read bronze tables to acquire schemas
+payments_bronze_df = spark.read.format("delta") \
+    .option("header", False) \
+    .load(bronze_path + "payments")
+payment_bronze_schema = payments_bronze_df.schema
+riders_bronze_df = spark.read.format("delta") \
+    .option("header", False) \
+    .load(bronze_path + "riders")
+rider_bronze_schema = riders_bronze_df.schema    
+stations_bronze_df = spark.read.format("delta") \
+    .option("header", False) \
+    .load(bronze_path + "stations")
+station_bronze_schema = stations_bronze_df.schema    
+trips_bronze_df = spark.read.format("delta") \
+    .option("header", False) \
+    .load(bronze_path + "trips")
+trip_bronze_schema = trips_bronze_df.schema
 
 # read the CSV file from GitHub as a PySpark DataFrame
 payments_df = spark.read.format("csv") \
@@ -42,18 +62,10 @@ trips_df = spark.read.format("csv") \
     .schema(trip_bronze_schema) \
     .load(data_path + "trips.csv")
 
-# Set the path to the directory
-
-bronze_path = folder_path + "bronze/"
-
 # Write to Bronze Tables
-payments_df.write.format("parquet").mode("overwrite").save(bronze_path + "payments")
-riders_df.write.format("parquet").mode("overwrite").save(bronze_path + "riders")
-stations_df.write.format("parquet").mode("overwrite").save(bronze_path + "stations")
-trips_df.write.format("parquet").mode("overwrite").save(bronze_path + "trips")
-
-
-
-# COMMAND ----------
+payments_df.write.format("delta").mode("overwrite").save(bronze_path + "payments")
+riders_df.write.format("delta").mode("overwrite").save(bronze_path + "riders")
+stations_df.write.format("delta").mode("overwrite").save(bronze_path + "stations")
+trips_df.write.format("delta").mode("overwrite").save(bronze_path + "trips")
 
 

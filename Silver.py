@@ -11,12 +11,32 @@ bronze_tables = ["payments", "riders", "stations", "trips"]
 
 # COMMAND ----------
 
-# Get Schemas from Schema Creation Notebook
-dbutils.notebook.run("/Repos/aden.victor@qualyfi.co.uk/Star-Schema/SchemaCreation", timeout_seconds=1800)
+# Read silver tables to acquire schemas
+payments_silver_df = spark.read.format("delta") \
+    .option("header", False) \
+    .load(silver_path + "payments")
+payment_silver_schema = payments_silver_df.schema
+riders_silver_df = spark.read.format("delta") \
+    .option("header", False) \
+    .load(silver_path + "riders")
+rider_silver_schema = riders_silver_df.schema    
+stations_silver_df = spark.read.format("delta") \
+    .option("header", False) \
+    .load(silver_path + "stations")
+station_silver_schema = stations_silver_df.schema    
+trips_silver_df = spark.read.format("delta") \
+    .option("header", False) \
+    .load(silver_path + "trips")
+trip_silver_schema = trips_silver_df.schema
+silver_schema_list = [payment_silver_schema, rider_silver_schema, station_silver_schema, trip_silver_schema]
+# In the specification start_station_id and end_station_id are listed as int types however they are foreign keys referring to a varchar field in station_id which causes type conflicts. As such I have changed them to string type.
+
+# COMMAND ----------
+
 # Read Bronze Tables & Write Silver Tables
 for j in range(4):
     file_name = bronze_path + "{}".format(bronze_tables[j])
-    table_data = spark.read.format("parquet") \
+    table_data = spark.read.format("delta") \
         .option("header", False) \
         .load(file_name)
     #table_data.show(3)

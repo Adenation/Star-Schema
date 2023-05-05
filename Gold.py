@@ -62,7 +62,3 @@ rider_df.write.format("delta").mode("overwrite").option("overwriteSchema", True)
 station_df.write.format("delta").mode("overwrite").option("overwriteSchema", True).save(gold_path + "dim_station")
 rideable_dimension.write.format("delta").mode("overwrite").option("overwriteSchema", True).save(gold_path + "dim_rideable")
 trip_date_dimension.write.format("delta").mode("overwrite").option("overwriteSchema", True).save(gold_path + "dim_trip_date")
-
-# COMMAND ----------
-
-
