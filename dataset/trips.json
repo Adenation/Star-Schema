@@ -1,0 +1,48 @@
+{
+	"name": "trips",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adenAzureBlobStorage1",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"fileName": "data.csv"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "trips.csv",
+				"folderPath": "csvs",
+				"container": "landing"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			}
+		]
+	}
+}
