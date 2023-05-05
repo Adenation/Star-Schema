@@ -455,7 +455,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "dataflow1",
+						"referenceName": "silver_transformation",
 						"type": "DataFlowReference"
 					},
 					"compute": {
