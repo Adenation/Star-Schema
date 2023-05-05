@@ -3,13 +3,17 @@
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "adenAzureBlobStorage1",
-			"type": "LinkedServiceReference"
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"fileName": "data.csv"
+			}
 		},
 		"annotations": [],
 		"type": "Parquet",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": "payments.parquet",
 				"container": "bronze"
 			},
 			"compressionCodec": "snappy"
