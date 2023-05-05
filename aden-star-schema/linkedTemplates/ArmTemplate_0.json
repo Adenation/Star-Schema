@@ -188,6 +188,7 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"fileName": "payments.parquet",
+						"folderPath": "tables",
 						"container": "bronze"
 					},
 					"compressionCodec": "snappy"
@@ -298,6 +299,7 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"fileName": "riders.parquet",
+						"folderPath": "tables",
 						"container": "bronze"
 					},
 					"compressionCodec": "snappy"
@@ -396,6 +398,7 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"fileName": "trips.parquet",
+						"folderPath": "tables",
 						"container": "bronze"
 					},
 					"compressionCodec": "snappy"
@@ -482,6 +485,7 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"fileName": "stations.parquet",
+						"folderPath": "tables",
 						"container": "bronze"
 					},
 					"compressionCodec": "snappy"
@@ -516,13 +520,17 @@
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "adenAzureBlobStorage1",
-					"type": "LinkedServiceReference"
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"fileName": "data.csv"
+					}
 				},
 				"annotations": [],
 				"type": "Parquet",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
+						"folderPath": "payments",
 						"container": "silver"
 					},
 					"compressionCodec": "snappy"
@@ -540,13 +548,17 @@
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "adenAzureBlobStorage1",
-					"type": "LinkedServiceReference"
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"fileName": "data.csv"
+					}
 				},
 				"annotations": [],
 				"type": "Parquet",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
+						"folderPath": "riders",
 						"container": "silver"
 					},
 					"compressionCodec": "snappy"
@@ -574,6 +586,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
+						"folderPath": "stations",
 						"container": "silver"
 					},
 					"compressionCodec": "snappy"
@@ -591,13 +604,17 @@
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "adenAzureBlobStorage1",
-					"type": "LinkedServiceReference"
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"fileName": "data.csv"
+					}
 				},
 				"annotations": [],
 				"type": "Parquet",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
+						"folderPath": "trips",
 						"container": "silver"
 					},
 					"compressionCodec": "snappy"
@@ -828,7 +845,8 @@
 						"     validateSchema: false,",
 						"     format: 'parquet',",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> sinkStations",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sinkStations",
 						"select2 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
@@ -1312,9 +1330,34 @@
 						]
 					},
 					{
-						"name": "Data flow1",
+						"name": "silver_transformation",
 						"type": "ExecuteDataFlow",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "payments_ingestion",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "riders_ingestion",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "stations_ingestion",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "trips_ingestion",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"policy": {
 							"timeout": "0.12:00:00",
 							"retry": 0,
@@ -1337,8 +1380,7 @@
 									"sinkPayments": {},
 									"sinkRiders": {},
 									"sinkTrips": {}
-								},
-								"linkedServiceParameters": {}
+								}
 							},
 							"staging": {},
 							"compute": {
