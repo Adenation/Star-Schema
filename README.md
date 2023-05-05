@@ -7,7 +7,7 @@ This project is designed to be imported into databricks and executed via a workf
 
 <details>
 <summary> Notebooks Snippet </summary>
-![Notebook Image](./img/Star Schema/DBFS Snip)
+![Notebook Image](./Star Schema/img/DBFS Snip)
 </details>
 
 # Design
