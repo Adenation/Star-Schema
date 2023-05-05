@@ -48,6 +48,7 @@
 								"storeSettings": {
 									"type": "AzureBlobStorageReadSettings",
 									"recursive": true,
+									"wildcardFileName": "*.csv",
 									"enablePartitionDiscovery": false
 								},
 								"formatSettings": {
@@ -147,7 +148,10 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"fileName": "trips.parquet",
+						"fileName": {
+							"value": "@concat(replace(substring(activity('Copy Data1').output.firstRow.fileName,sub(lenght(activity('Copy Data1').output.firstRow.fileName), 3), 3), '.csv', '.parquet'), '/')",
+							"type": "Expression"
+						},
 						"container": "bronze"
 					},
 					"compressionCodec": "snappy"
