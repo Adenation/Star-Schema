@@ -13,6 +13,460 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/silver_transformation')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Cast all columns from bronze tables to silver tables",
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "bronze_stations",
+								"type": "DatasetReference"
+							},
+							"name": "stations"
+						},
+						{
+							"dataset": {
+								"referenceName": "bronze_payments",
+								"type": "DatasetReference"
+							},
+							"name": "payments"
+						},
+						{
+							"dataset": {
+								"referenceName": "bronze_riders",
+								"type": "DatasetReference"
+							},
+							"name": "riders"
+						},
+						{
+							"dataset": {
+								"referenceName": "bronze_trips",
+								"type": "DatasetReference"
+							},
+							"name": "trips"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "silver_stations",
+								"type": "DatasetReference"
+							},
+							"name": "sinkStations"
+						},
+						{
+							"dataset": {
+								"referenceName": "silver_payments",
+								"type": "DatasetReference"
+							},
+							"name": "sinkPayments"
+						},
+						{
+							"dataset": {
+								"referenceName": "silver_riders",
+								"type": "DatasetReference"
+							},
+							"name": "sinkRiders"
+						},
+						{
+							"dataset": {
+								"referenceName": "silver_trips",
+								"type": "DatasetReference"
+							},
+							"name": "sinkTrips"
+						}
+					],
+					"transformations": [
+						{
+							"name": "castStations"
+						},
+						{
+							"name": "castPayments"
+						},
+						{
+							"name": "castRiders"
+						},
+						{
+							"name": "castTrips"
+						},
+						{
+							"name": "select1"
+						},
+						{
+							"name": "select2"
+						},
+						{
+							"name": "select3"
+						},
+						{
+							"name": "select4"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          {1} as string,",
+						"          {2} as string,",
+						"          {3} as string,",
+						"          {4} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> stations",
+						"source(output(",
+						"          {1} as string,",
+						"          {2} as string,",
+						"          {3} as string,",
+						"          {4} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> payments",
+						"source(output(",
+						"          {1} as string,",
+						"          {2} as string,",
+						"          {3} as string,",
+						"          {4} as string,",
+						"          {5} as string,",
+						"          {6} as string,",
+						"          {7} as string,",
+						"          {8} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> riders",
+						"source(output(",
+						"          {1} as string,",
+						"          {2} as string,",
+						"          {3} as string,",
+						"          {4} as string,",
+						"          {5} as string,",
+						"          {6} as string,",
+						"          {7} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> trips",
+						"stations cast(output(",
+						"          {1} as string,",
+						"          {2} as string,",
+						"          {3} as float,",
+						"          {4} as float",
+						"     ),",
+						"     errors: true) ~> castStations",
+						"payments cast(output(",
+						"          {1} as integer,",
+						"          {2} as date 'yyyy-MM-dd',",
+						"          {3} as decimal(10,0),",
+						"          {4} as integer",
+						"     ),",
+						"     errors: true) ~> castPayments",
+						"riders cast(output(",
+						"          {1} as integer,",
+						"          {2} as string,",
+						"          {3} as string,",
+						"          {4} as string,",
+						"          {5} as date 'yyyy-MM-dd',",
+						"          {6} as date 'yyyy-MM-dd',",
+						"          {7} as date 'yyyy-MM-dd',",
+						"          {8} as boolean",
+						"     ),",
+						"     errors: true) ~> castRiders",
+						"trips cast(output(",
+						"          {1} as string,",
+						"          {2} as string,",
+						"          {3} as timestamp 'dd/MM/yyyy HH:mm',",
+						"          {4} as timestamp 'dd/MM/yyyy HH:mm',",
+						"          {5} as string,",
+						"          {6} as string,",
+						"          {7} as integer",
+						"     ),",
+						"     errors: true) ~> castTrips",
+						"castStations select(mapColumn(",
+						"          station_id = {1},",
+						"          name = {2},",
+						"          latitude = {3},",
+						"          longitude = {4}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"castPayments select(mapColumn(",
+						"          payment_id = {1},",
+						"          date = {2},",
+						"          amount = {3},",
+						"          rider_id = {4}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select2",
+						"castRiders select(mapColumn(",
+						"          rider_id = {1},",
+						"          first_name = {2},",
+						"          last_name = {3},",
+						"          address = {4},",
+						"          birthday = {5},",
+						"          account_start_date = {6},",
+						"          account_end_date = {7},",
+						"          is_member = {8}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select3",
+						"castTrips select(mapColumn(",
+						"          trip_id = {1},",
+						"          rideable_type = {2},",
+						"          started_at = {3},",
+						"          ended_at = {4},",
+						"          start_station_id = {5},",
+						"          end_station_id = {6},",
+						"          rider_id = {7}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select4",
+						"select1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     truncate: true,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> sinkStations",
+						"select2 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     truncate: true,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> sinkPayments",
+						"select3 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     truncate: true,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> sinkRiders",
+						"select4 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     truncate: true,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> sinkTrips"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/golden_transformation')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "silver_stations",
+								"type": "DatasetReference"
+							},
+							"name": "stations"
+						},
+						{
+							"dataset": {
+								"referenceName": "silver_payments",
+								"type": "DatasetReference"
+							},
+							"name": "payments"
+						},
+						{
+							"dataset": {
+								"referenceName": "silver_riders",
+								"type": "DatasetReference"
+							},
+							"name": "riders"
+						},
+						{
+							"dataset": {
+								"referenceName": "silver_trips",
+								"type": "DatasetReference"
+							},
+							"name": "trips"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "dim_payment",
+								"type": "DatasetReference"
+							},
+							"name": "paymentsDimension"
+						},
+						{
+							"dataset": {
+								"referenceName": "dim_stations",
+								"type": "DatasetReference"
+							},
+							"name": "stationsDimension"
+						},
+						{
+							"dataset": {
+								"referenceName": "rider_dimension",
+								"type": "DatasetReference"
+							},
+							"name": "ridersDimension"
+						},
+						{
+							"dataset": {
+								"referenceName": "dim_rideable",
+								"type": "DatasetReference"
+							},
+							"name": "rideableDimension"
+						}
+					],
+					"transformations": [
+						{
+							"name": "select1"
+						},
+						{
+							"name": "droppingRiderID"
+						},
+						{
+							"name": "select2"
+						},
+						{
+							"name": "aggregate1"
+						},
+						{
+							"name": "surrogateKey1"
+						},
+						{
+							"name": "select3"
+						},
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          station_id as string,",
+						"          name as string,",
+						"          latitude as float,",
+						"          longitude as float",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> stations",
+						"source(output(",
+						"          payment_id as integer,",
+						"          date as date,",
+						"          amount as decimal(10,0),",
+						"          rider_id as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> payments",
+						"source(output(",
+						"          rider_id as integer,",
+						"          first_name as string,",
+						"          last_name as string,",
+						"          address as string,",
+						"          birthday as date,",
+						"          account_start_date as date,",
+						"          account_end_date as date,",
+						"          is_member as boolean",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> riders",
+						"source(output(",
+						"          trip_id as string,",
+						"          rideable_type as string,",
+						"          started_at as timestamp,",
+						"          ended_at as timestamp,",
+						"          start_station_id as string,",
+						"          end_station_id as string,",
+						"          rider_id as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> trips",
+						"stations select(mapColumn(",
+						"          station_id,",
+						"          name,",
+						"          latitude,",
+						"          longitude",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"payments select(mapColumn(",
+						"          payment_id,",
+						"          date,",
+						"          amount",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> droppingRiderID",
+						"trips select(mapColumn(",
+						"          rideable_type",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select2",
+						"select2 aggregate(groupBy(rideable_type),",
+						"     rideable_type_id = countDistinct(rideable_type)) ~> aggregate1",
+						"aggregate1 keyGenerate(output(rideable_type_id as long),",
+						"     startAt: 1L,",
+						"     stepValue: 1L) ~> surrogateKey1",
+						"trips select(mapColumn(",
+						"          trip_id,",
+						"          started_at,",
+						"          ended_at",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select3",
+						"select3 derive(duration = minus(ended_at, started_at)) ~> derivedColumn1",
+						"droppingRiderID sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     truncate: true,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> paymentsDimension",
+						"select1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     truncate: true,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> stationsDimension",
+						"riders sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          payment_id as integer,",
+						"          date as date,",
+						"          amount as decimal(10,0)",
+						"     ),",
+						"     format: 'parquet',",
+						"     truncate: true,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> ridersDimension",
+						"surrogateKey1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          payment_id as integer,",
+						"          date as date,",
+						"          amount as decimal(10,0)",
+						"     ),",
+						"     format: 'parquet',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> rideableDimension"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Medallion-Basic')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -553,8 +1007,12 @@
 								"datasetParameters": {
 									"stations": {},
 									"payments": {},
+									"riders": {},
+									"trips": {},
 									"paymentsDimension": {},
-									"stationsDimension": {}
+									"stationsDimension": {},
+									"ridersDimension": {},
+									"rideableDimension": {}
 								}
 							},
 							"staging": {},
@@ -572,7 +1030,10 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/silver_transformation')]",
+				"[concat(variables('factoryId'), '/dataflows/golden_transformation')]"
+			]
 		}
 	]
 }

@@ -667,8 +667,12 @@
 								"datasetParameters": {
 									"stations": {},
 									"payments": {},
+									"riders": {},
+									"trips": {},
 									"paymentsDimension": {},
-									"stationsDimension": {}
+									"stationsDimension": {},
+									"ridersDimension": {},
+									"rideableDimension": {}
 								}
 							},
 							"staging": {},
@@ -1368,8 +1372,8 @@
 						"trips cast(output(",
 						"          {1} as string,",
 						"          {2} as string,",
-						"          {3} as timestamp 'dd/MM/yyyy hh:mm',",
-						"          {4} as timestamp 'dd/MM/yyyy hh:mm',",
+						"          {3} as timestamp 'dd/MM/yyyy HH:mm',",
+						"          {4} as timestamp 'dd/MM/yyyy HH:mm',",
 						"          {5} as string,",
 						"          {6} as string,",
 						"          {7} as integer",
@@ -1473,6 +1477,20 @@
 								"type": "DatasetReference"
 							},
 							"name": "payments"
+						},
+						{
+							"dataset": {
+								"referenceName": "silver_riders",
+								"type": "DatasetReference"
+							},
+							"name": "riders"
+						},
+						{
+							"dataset": {
+								"referenceName": "silver_trips",
+								"type": "DatasetReference"
+							},
+							"name": "trips"
 						}
 					],
 					"sinks": [
@@ -1489,6 +1507,20 @@
 								"type": "DatasetReference"
 							},
 							"name": "stationsDimension"
+						},
+						{
+							"dataset": {
+								"referenceName": "rider_dimension",
+								"type": "DatasetReference"
+							},
+							"name": "ridersDimension"
+						},
+						{
+							"dataset": {
+								"referenceName": "dim_rideable",
+								"type": "DatasetReference"
+							},
+							"name": "rideableDimension"
 						}
 					],
 					"transformations": [
@@ -1497,6 +1529,21 @@
 						},
 						{
 							"name": "droppingRiderID"
+						},
+						{
+							"name": "select2"
+						},
+						{
+							"name": "aggregate1"
+						},
+						{
+							"name": "surrogateKey1"
+						},
+						{
+							"name": "select3"
+						},
+						{
+							"name": "derivedColumn1"
 						}
 					],
 					"scriptLines": [
@@ -1520,6 +1567,33 @@
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false,",
 						"     format: 'parquet') ~> payments",
+						"source(output(",
+						"          rider_id as integer,",
+						"          first_name as string,",
+						"          last_name as string,",
+						"          address as string,",
+						"          birthday as date,",
+						"          account_start_date as date,",
+						"          account_end_date as date,",
+						"          is_member as boolean",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> riders",
+						"source(output(",
+						"          trip_id as string,",
+						"          rideable_type as string,",
+						"          started_at as timestamp,",
+						"          ended_at as timestamp,",
+						"          start_station_id as string,",
+						"          end_station_id as string,",
+						"          rider_id as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> trips",
 						"stations select(mapColumn(",
 						"          station_id,",
 						"          name,",
@@ -1535,24 +1609,69 @@
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> droppingRiderID",
+						"trips select(mapColumn(",
+						"          rideable_type",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select2",
+						"select2 aggregate(groupBy(rideable_type),",
+						"     rideable_type_id = countDistinct(rideable_type)) ~> aggregate1",
+						"aggregate1 keyGenerate(output(rideable_type_id as long),",
+						"     startAt: 1L,",
+						"     stepValue: 1L) ~> surrogateKey1",
+						"trips select(mapColumn(",
+						"          trip_id,",
+						"          started_at,",
+						"          ended_at",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select3",
+						"select3 derive(duration = minus(ended_at, started_at)) ~> derivedColumn1",
 						"droppingRiderID sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
+						"     truncate: true,",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> paymentsDimension",
 						"select1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
+						"     truncate: true,",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> stationsDimension"
+						"     skipDuplicateMapOutputs: true) ~> stationsDimension",
+						"riders sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          payment_id as integer,",
+						"          date as date,",
+						"          amount as decimal(10,0)",
+						"     ),",
+						"     format: 'parquet',",
+						"     truncate: true,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> ridersDimension",
+						"surrogateKey1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          payment_id as integer,",
+						"          date as date,",
+						"          amount as decimal(10,0)",
+						"     ),",
+						"     format: 'parquet',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> rideableDimension"
 					]
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/silver_stations')]",
 				"[concat(variables('factoryId'), '/datasets/silver_payments')]",
+				"[concat(variables('factoryId'), '/datasets/silver_riders')]",
+				"[concat(variables('factoryId'), '/datasets/silver_trips')]",
 				"[concat(variables('factoryId'), '/datasets/dim_payment')]",
-				"[concat(variables('factoryId'), '/datasets/dim_stations')]"
+				"[concat(variables('factoryId'), '/datasets/dim_stations')]",
+				"[concat(variables('factoryId'), '/datasets/rider_dimension')]",
+				"[concat(variables('factoryId'), '/datasets/dim_rideable')]"
 			]
 		},
 		{
@@ -1606,6 +1725,92 @@
 					"compressionCodec": "snappy"
 				},
 				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/adenAzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/rider_dimension')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "adenAzureBlobStorage1",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"fileName": "data.csv"
+					}
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "rider_dimension",
+						"container": "gold"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "payment_id",
+						"type": "INT32"
+					},
+					{
+						"name": "date",
+						"type": "DATE"
+					},
+					{
+						"name": "amount",
+						"type": "DECIMAL",
+						"precision": 10,
+						"scale": 0
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/adenAzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dim_rideable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "adenAzureBlobStorage1",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"fileName": "data.csv"
+					}
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "dim_rideable",
+						"container": "gold"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "payment_id",
+						"type": "INT32"
+					},
+					{
+						"name": "date",
+						"type": "DATE"
+					},
+					{
+						"name": "amount",
+						"type": "DECIMAL",
+						"precision": 10,
+						"scale": 0
+					}
+				]
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/adenAzureBlobStorage1')]"
