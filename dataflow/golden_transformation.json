@@ -50,7 +50,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "rider_dimension",
+						"referenceName": "dim_rider",
 						"type": "DatasetReference"
 					},
 					"name": "ridersDimension"

@@ -1,5 +1,5 @@
 {
-	"name": "rider_dimension",
+	"name": "dim_rider",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "adenAzureBlobStorage1",
@@ -13,7 +13,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"folderPath": "rider_dimension",
+				"folderPath": "dim_rider",
 				"container": "gold"
 			},
 			"compressionCodec": "snappy"
