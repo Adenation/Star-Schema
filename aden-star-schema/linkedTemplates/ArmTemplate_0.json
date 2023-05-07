@@ -682,7 +682,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/rider_dimension')]",
+			"name": "[concat(parameters('factoryName'), '/dim_rider')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -698,7 +698,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"folderPath": "rider_dimension",
+						"folderPath": "dim_rider",
 						"container": "gold"
 					},
 					"compressionCodec": "snappy"

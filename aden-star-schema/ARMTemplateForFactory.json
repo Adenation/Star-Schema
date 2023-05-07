@@ -672,7 +672,10 @@
 									"paymentsDimension": {},
 									"stationsDimension": {},
 									"ridersDimension": {},
-									"rideableDimension": {}
+									"rideableDimension": {},
+									"tripDateDimension": {},
+									"factTrip": {},
+									"transactionFact": {}
 								}
 							},
 							"staging": {},
@@ -1510,7 +1513,7 @@
 						},
 						{
 							"dataset": {
-								"referenceName": "rider_dimension",
+								"referenceName": "dim_rider",
 								"type": "DatasetReference"
 							},
 							"name": "ridersDimension"
@@ -1521,6 +1524,27 @@
 								"type": "DatasetReference"
 							},
 							"name": "rideableDimension"
+						},
+						{
+							"dataset": {
+								"referenceName": "dim_trip_date",
+								"type": "DatasetReference"
+							},
+							"name": "tripDateDimension"
+						},
+						{
+							"dataset": {
+								"referenceName": "fact_trip",
+								"type": "DatasetReference"
+							},
+							"name": "factTrip"
+						},
+						{
+							"dataset": {
+								"referenceName": "fact_transaction",
+								"type": "DatasetReference"
+							},
+							"name": "transactionFact"
 						}
 					],
 					"transformations": [
@@ -1544,6 +1568,15 @@
 						},
 						{
 							"name": "derivedColumn1"
+						},
+						{
+							"name": "join1"
+						},
+						{
+							"name": "keepIDCols"
+						},
+						{
+							"name": "selectIDcols"
 						}
 					],
 					"scriptLines": [
@@ -1626,7 +1659,27 @@
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> select3",
-						"select3 derive(duration = minus(ended_at, started_at)) ~> derivedColumn1",
+						"select3 derive(duration_secs = minus(ended_at, started_at) / 1000) ~> derivedColumn1",
+						"surrogateKey1, trips join(aggregate1@rideable_type == trips@rideable_type,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join1",
+						"join1 select(mapColumn(",
+						"          rideable_type_id,",
+						"          trip_id,",
+						"          start_station_id,",
+						"          end_station_id,",
+						"          rider_id",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> keepIDCols",
+						"payments select(mapColumn(",
+						"          payment_id,",
+						"          rider_id",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> selectIDcols",
 						"droppingRiderID sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
@@ -1659,7 +1712,37 @@
 						"     ),",
 						"     format: 'parquet',",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> rideableDimension"
+						"     skipDuplicateMapOutputs: true) ~> rideableDimension",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          payment_id as integer,",
+						"          date as date,",
+						"          amount as decimal(10,0)",
+						"     ),",
+						"     format: 'parquet',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> tripDateDimension",
+						"keepIDCols sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          payment_id as integer,",
+						"          date as date,",
+						"          amount as decimal(10,0)",
+						"     ),",
+						"     format: 'parquet',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> factTrip",
+						"selectIDcols sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          payment_id as integer,",
+						"          date as date,",
+						"          amount as decimal(10,0)",
+						"     ),",
+						"     format: 'parquet',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> transactionFact"
 					]
 				}
 			},
@@ -1670,8 +1753,11 @@
 				"[concat(variables('factoryId'), '/datasets/silver_trips')]",
 				"[concat(variables('factoryId'), '/datasets/dim_payment')]",
 				"[concat(variables('factoryId'), '/datasets/dim_stations')]",
-				"[concat(variables('factoryId'), '/datasets/rider_dimension')]",
-				"[concat(variables('factoryId'), '/datasets/dim_rideable')]"
+				"[concat(variables('factoryId'), '/datasets/dim_rider')]",
+				"[concat(variables('factoryId'), '/datasets/dim_rideable')]",
+				"[concat(variables('factoryId'), '/datasets/dim_trip_date')]",
+				"[concat(variables('factoryId'), '/datasets/fact_trip')]",
+				"[concat(variables('factoryId'), '/datasets/fact_transaction')]"
 			]
 		},
 		{
@@ -1731,7 +1817,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/rider_dimension')]",
+			"name": "[concat(parameters('factoryName'), '/dim_rider')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -1747,7 +1833,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"folderPath": "rider_dimension",
+						"folderPath": "dim_rider",
 						"container": "gold"
 					},
 					"compressionCodec": "snappy"
@@ -1791,6 +1877,135 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"folderPath": "dim_rideable",
+						"container": "gold"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "payment_id",
+						"type": "INT32"
+					},
+					{
+						"name": "date",
+						"type": "DATE"
+					},
+					{
+						"name": "amount",
+						"type": "DECIMAL",
+						"precision": 10,
+						"scale": 0
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/adenAzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dim_trip_date')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "adenAzureBlobStorage1",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"fileName": "data.csv"
+					}
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "dim_trip_date",
+						"container": "gold"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "payment_id",
+						"type": "INT32"
+					},
+					{
+						"name": "date",
+						"type": "DATE"
+					},
+					{
+						"name": "amount",
+						"type": "DECIMAL",
+						"precision": 10,
+						"scale": 0
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/adenAzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/fact_trip')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "adenAzureBlobStorage1",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"fileName": "data.csv"
+					}
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "fact_trip",
+						"container": "gold"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "payment_id",
+						"type": "INT32"
+					},
+					{
+						"name": "date",
+						"type": "DATE"
+					},
+					{
+						"name": "amount",
+						"type": "DECIMAL",
+						"precision": 10,
+						"scale": 0
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/adenAzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/fact_transaction')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "adenAzureBlobStorage1",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"fileName": "data.csv"
+					}
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "fact_transaction",
 						"container": "gold"
 					},
 					"compressionCodec": "snappy"
