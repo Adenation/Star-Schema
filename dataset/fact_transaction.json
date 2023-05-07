@@ -1,0 +1,34 @@
+{
+	"name": "fact_transaction",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adenAzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "gold"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "payment_id",
+				"type": "INT32"
+			},
+			{
+				"name": "date",
+				"type": "DATE"
+			},
+			{
+				"name": "amount",
+				"type": "DECIMAL",
+				"precision": 10,
+				"scale": 0
+			}
+		]
+	}
+}

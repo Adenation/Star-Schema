@@ -1,0 +1,38 @@
+{
+	"name": "fact_trip",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adenAzureBlobStorage1",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"fileName": "data.csv"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "fact_trip",
+				"container": "gold"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "payment_id",
+				"type": "INT32"
+			},
+			{
+				"name": "date",
+				"type": "DATE"
+			},
+			{
+				"name": "amount",
+				"type": "DECIMAL",
+				"precision": 10,
+				"scale": 0
+			}
+		]
+	}
+}
