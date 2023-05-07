@@ -1,0 +1,49 @@
+{
+	"name": "query1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "dim_trip_date",
+						"type": "DatasetReference"
+					},
+					"name": "dimTripDate"
+				}
+			],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "groupByDate"
+				},
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          trip_id as string,",
+				"          started_at as timestamp,",
+				"          ended_at as timestamp,",
+				"          duration_secs as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> dimTripDate",
+				"derivedColumn1 aggregate(groupBy(started_at),",
+				"     amount = sum(duration_secs)) ~> groupByDate",
+				"dimTripDate derive(hour = hour(started_at)) ~> derivedColumn1",
+				"groupByDate sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}
