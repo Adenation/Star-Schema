@@ -4,7 +4,7 @@ Data lake solution for bikeshare
 Peace and Blessings. 
 This project utilises raw data from a bike sharing program, converts and manipulates the data into a star schema format with 2 fact tables and 5 dimension tables. The star schema format is optimal for executing queries for business analysis at the cost of some data redundancy.
 This project is designed to be imported into databricks and executed via a workflow.
-
+![Alt Text](pika facepalm.png)
 <details>
 <summary> Notebooks Snippet </summary>
 ![Alt Text](DBFS_Snip.png)
