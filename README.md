@@ -7,7 +7,7 @@ This project is designed to be imported into databricks and executed via a workf
 
 <details>
 <summary> Notebooks Snippet </summary>
-![Alt Text](Star_Schema/img/DBFSSnip.png)
+![Alt Text](img/DBFSSnip.png)
 </details>
 
 # Design
@@ -15,11 +15,11 @@ This project is designed to be imported into databricks and executed via a workf
 <details>
 <summary> Visual Database Designs </summary>
 Conceptual Database Design
-![Conceptual Database Design](Star_Schema/img/ConceptualDatabaseDesign.png)
+![Conceptual Database Design](img/ConceptualDatabaseDesign.png)
 Logical Database Design
-![Logical Database Design](Star_Schema/img/LogicalDatabaseDesign.png)
+![Logical Database Design](img/LogicalDatabaseDesign.png)
 Physical Database Design
-![Physical Database Design](Star_Schema/img/PhysicalDatabaseDesign.png)
+![Physical Database Design](img/PhysicalDatabaseDesign.png)
 </details>
 
 # Implementation
@@ -50,26 +50,26 @@ Example Queries:
 Please see below images of various aspects of the project:
 <details>
 <summary> DBFS Directory Layout </summary>
-![image](Star_Schema/img/designimages.png)
+![image](img/designimages.png)
 </details>
 
 <details>
 <summary> Fact Table </summary>
-![image](Star_Schema/img/FactTableSnip.png)
+![image](img/FactTableSnip.png)
 </details>
 
 <details>
 <summary> Dimension Table </summary>
-![image](Star_Schema/img/DimensionTableSnip.png)
+![image](img/DimensionTableSnip.png)
 </details>
 
 <details>
 <summary> Example Query </summary>
-![image](Star_Schema/img/QuerySnip.png)
+![image](img/QuerySnip.png)
 </details>
 
 <details>
 <summary> Workflow </summary>
-![image](Star_Schema/img/WorkflowSnip.png)
+![image](img/WorkflowSnip.png)
 
 </details>
