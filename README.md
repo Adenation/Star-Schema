@@ -1,13 +1,13 @@
 # Star-Schema
 Data lake solution for bikeshare
-![Alt Text](https://github.com/Adenation/Star-Schema/blob/main/img/ConceptualDatabaseDesign.png)
+
 Peace and Blessings. 
 This project utilises raw data from a bike sharing program, converts and manipulates the data into a star schema format with 2 fact tables and 5 dimension tables. The star schema format is optimal for executing queries for business analysis at the cost of some data redundancy.
 This project is designed to be imported into databricks and executed via a workflow.
 
 <details>
 <summary> Notebooks Snippet </summary>
-![Alt Text](img/DBFSSnip.png)
+![Alt Text](https://github.com/Adenation/Star-Schema/blob/main/img/DBFSSnip.png)
 </details>
 
 # Design
@@ -15,11 +15,11 @@ This project is designed to be imported into databricks and executed via a workf
 <details>
 <summary> Visual Database Designs </summary>
 Conceptual Database Design
-![Conceptual Database Design](img/ConceptualDatabaseDesign.png)
+![Conceptual Database Design](https://github.com/Adenation/Star-Schema/blob/main/img/ConceptualDatabaseDesign.png)
 Logical Database Design
-![Logical Database Design](img/LogicalDatabaseDesign.png)
+![Logical Database Design](https://github.com/Adenation/Star-Schema/blob/main/img/LogicalDatabaseDesign.png)
 Physical Database Design
-![Physical Database Design](img/PhysicalDatabaseDesign.png)
+![Physical Database Design](https://github.com/Adenation/Star-Schema/blob/main/img/PhysicalDatabaseDesign.png)
 </details>
 
 # Implementation
@@ -50,26 +50,26 @@ Example Queries:
 Please see below images of various aspects of the project:
 <details>
 <summary> DBFS Directory Layout </summary>
-![image](img/designimages.png)
+![image](https://github.com/Adenation/Star-Schema/blob/main/img/designimages.png)
 </details>
 
 <details>
 <summary> Fact Table </summary>
-![image](img/FactTableSnip.png)
+![image](https://github.com/Adenation/Star-Schema/blob/main/img/FactTableSnip.png)
 </details>
 
 <details>
 <summary> Dimension Table </summary>
-![image](img/DimensionTableSnip.png)
+![image](https://github.com/Adenation/Star-Schema/blob/main/img/DimensionTableSnip.png)
 </details>
 
 <details>
 <summary> Example Query </summary>
-![image](img/QuerySnip.png)
+![image](https://github.com/Adenation/Star-Schema/blob/main/img/QuerySnip.png)
 </details>
 
 <details>
 <summary> Workflow </summary>
-![image](img/WorkflowSnip.png)
+![image](https://github.com/Adenation/Star-Schema/blob/main/img/WorkflowSnip.png)
 
 </details>
