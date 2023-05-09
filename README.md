@@ -15,7 +15,7 @@ This project is designed to be imported into databricks and executed via a workf
 <details>
 <summary> Visual Database Designs </summary>
 Conceptual Database Design
-![Conceptual Database Design](https://user-images.githubusercontent.com/71145307/236345472-c392377c-1bca-4d33-943a-1028b44693d6.png)
+![Conceptual Database Design](Star_Schema/img/DBFS_Snip.png)
 Logical Database Design
 ![Logical Database Design](https://user-images.githubusercontent.com/71145307/236345484-09b63746-b989-47a9-ac9c-07893c3941ee.png)
 Physical Database Design
