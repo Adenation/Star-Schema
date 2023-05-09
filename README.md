@@ -1,13 +1,13 @@
 # Star-Schema
 Data lake solution for bikeshare
-![Alt Text](pikafacepalm.png)
+
 Peace and Blessings. 
 This project utilises raw data from a bike sharing program, converts and manipulates the data into a star schema format with 2 fact tables and 5 dimension tables. The star schema format is optimal for executing queries for business analysis at the cost of some data redundancy.
 This project is designed to be imported into databricks and executed via a workflow.
-![Alt Text](pika facepalm.png)
+
 <details>
 <summary> Notebooks Snippet </summary>
-![Alt Text](DBFS_Snip.png)
+![Alt Text](Star_Schema/img/DBFSSnip.png)
 </details>
 
 # Design
@@ -15,11 +15,11 @@ This project is designed to be imported into databricks and executed via a workf
 <details>
 <summary> Visual Database Designs </summary>
 Conceptual Database Design
-![Conceptual Database Design](Star_Schema/img/DBFS_Snip.png)
+![Conceptual Database Design](Star_Schema/img/ConceptualDatabaseDesign.png)
 Logical Database Design
-![Logical Database Design](https://user-images.githubusercontent.com/71145307/236345484-09b63746-b989-47a9-ac9c-07893c3941ee.png)
+![Logical Database Design](Star_Schema/img/LogicalDatabaseDesign.png)
 Physical Database Design
-![Physical Database Design](https://user-images.githubusercontent.com/71145307/236345494-c1ba720e-cf63-456c-ba21-b50b5d0c4bd7.png)
+![Physical Database Design](Star_Schema/img/PhysicalDatabaseDesign.png)
 </details>
 
 # Implementation
@@ -50,26 +50,26 @@ Example Queries:
 Please see below images of various aspects of the project:
 <details>
 <summary> DBFS Directory Layout </summary>
-![image](https://user-images.githubusercontent.com/71145307/236349097-1c795175-a2ca-4b06-b918-db9bb6955fc9.png)
+![image](Star_Schema/img/designimages.png)
 </details>
 
 <details>
 <summary> Fact Table </summary>
-![image](https://user-images.githubusercontent.com/71145307/236349582-ca8f1f03-f68c-4019-8514-5d47687f155b.png)
+![image](Star_Schema/img/FactTableSnip.png)
 </details>
 
 <details>
 <summary> Dimension Table </summary>
-![image](https://user-images.githubusercontent.com/71145307/236349648-3c2bce52-f4fc-442c-aba1-3affc17513e3.png)
+![image](Star_Schema/img/DimensionTableSnip.png)
 </details>
 
 <details>
 <summary> Example Query </summary>
-![image](https://user-images.githubusercontent.com/71145307/236349258-11e50b00-6557-499e-91ae-35d66c92bad1.png)
+![image](Star_Schema/img/QuerySnip.png)
 </details>
 
 <details>
 <summary> Workflow </summary>
-![image](https://user-images.githubusercontent.com/71145307/236353156-67686a0d-c144-48fe-996a-2c14e6497fc9.png)
+![image](Star_Schema/img/WorkflowSnip.png)
 
 </details>
