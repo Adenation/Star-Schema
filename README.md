@@ -7,7 +7,7 @@ This project is designed to be imported into databricks and executed via a workf
 
 <details>
 <summary> Notebooks Snippet </summary>
-![Alt Text](https://github.com/Adenation/Star-Schema/blob/main/Star_Schema/img/DBFS_Snip.png)
+![Alt Text](DBFS_Snip.png)
 </details>
 
 # Design
