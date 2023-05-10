@@ -1,0 +1,16 @@
+{
+	"name": "TimeSpentPerRideBasedOnDayOfWeek",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AdenStarSchemaDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "",
+			"table": "TimeSpentPerRideBasedOnDayOfWeek"
+		}
+	}
+}

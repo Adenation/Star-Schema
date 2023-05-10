@@ -1,0 +1,69 @@
+{
+	"name": "TimeSpentPerRideBasedOnDayOfWeek",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "dim_trip_date",
+						"type": "DatasetReference"
+					},
+					"name": "dimTripDate"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "TimeSpentPerRideBasedOnDayOfWeek",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "groupByDate"
+				},
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          trip_id as string,",
+				"          started_at as timestamp,",
+				"          ended_at as timestamp,",
+				"          duration_secs as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> dimTripDate",
+				"derivedColumn1 aggregate(groupBy(DayOfWeek),",
+				"     amount = sum(duration_secs)) ~> groupByDate",
+				"dimTripDate derive(DayOfWeek = case(\r",
+				"    dayOfWeek(toDate(started_at)) == 1, 'Sunday', \r",
+				"    dayOfWeek(toDate(started_at)) == 2, 'Monday',\r",
+				"    dayOfWeek(toDate(started_at)) == 3, 'Tuesday', \r",
+				"    dayOfWeek(toDate(started_at)) == 4, 'Wednesday', \r",
+				"    dayOfWeek(toDate(started_at)) == 5, 'Thursday', \r",
+				"    dayOfWeek(toDate(started_at)) == 6, 'Friday', \r",
+				"    dayOfWeek(toDate(started_at)) == 7, 'Saturday', \r",
+				"    ''\r",
+				")\r",
+				") ~> derivedColumn1",
+				"groupByDate sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}
