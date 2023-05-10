@@ -1,5 +1,5 @@
 {
-	"name": "query1",
+	"name": "TimeSpentPerRideBasedOnHour",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -14,6 +14,10 @@
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "TimeSpentPerRideBasedOnHour",
+						"type": "DatasetReference"
+					},
 					"name": "sink1"
 				}
 			],
@@ -36,13 +40,19 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     format: 'parquet') ~> dimTripDate",
-				"derivedColumn1 aggregate(groupBy(started_at),",
+				"derivedColumn1 aggregate(groupBy(hour),",
 				"     amount = sum(duration_secs)) ~> groupByDate",
 				"dimTripDate derive(hour = hour(started_at)) ~> derivedColumn1",
 				"groupByDate sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
 			]
 		}
 	}
