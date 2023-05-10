@@ -5,6 +5,9 @@
 		"factoryName": {
 			"value": "aden-star-schema"
 		},
+		"AdenStarSchemaDB_connectionString": {
+			"value": ""
+		},
 		"adenAzureBlobStorage1_connectionString": {
 			"value": ""
 		},

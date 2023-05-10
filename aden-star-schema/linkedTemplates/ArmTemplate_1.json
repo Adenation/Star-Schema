@@ -13,7 +13,7 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/dim_trip_date')]",
+			"name": "[concat(parameters('factoryName'), '/silver_stations')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -29,32 +29,17 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"folderPath": "dim_trip_date",
-						"container": "gold"
+						"folderPath": "stations",
+						"container": "silver"
 					},
 					"compressionCodec": "snappy"
 				},
-				"schema": [
-					{
-						"name": "payment_id",
-						"type": "INT32"
-					},
-					{
-						"name": "date",
-						"type": "DATE"
-					},
-					{
-						"name": "amount",
-						"type": "DECIMAL",
-						"precision": 10,
-						"scale": 0
-					}
-				]
+				"schema": []
 			},
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/fact_trip')]",
+			"name": "[concat(parameters('factoryName'), '/silver_trips')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -70,32 +55,56 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"folderPath": "fact_trip",
-						"container": "gold"
+						"folderPath": "trips",
+						"container": "silver"
 					},
 					"compressionCodec": "snappy"
 				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/stations')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "adenAzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "stations.csv",
+						"folderPath": "csvs",
+						"container": "landing"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
 				"schema": [
 					{
-						"name": "payment_id",
-						"type": "INT32"
+						"type": "String"
 					},
 					{
-						"name": "date",
-						"type": "DATE"
+						"type": "String"
 					},
 					{
-						"name": "amount",
-						"type": "DECIMAL",
-						"precision": 10,
-						"scale": 0
+						"type": "String"
+					},
+					{
+						"type": "String"
 					}
 				]
 			},
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/fact_transaction')]",
+			"name": "[concat(parameters('factoryName'), '/trips')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -107,275 +116,249 @@
 					}
 				},
 				"annotations": [],
-				"type": "Parquet",
+				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"folderPath": "fact_transaction",
-						"container": "gold"
+						"fileName": "trips.csv",
+						"folderPath": "csvs",
+						"container": "landing"
 					},
-					"compressionCodec": "snappy"
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
 				},
 				"schema": [
 					{
-						"name": "payment_id",
-						"type": "INT32"
+						"type": "String"
 					},
 					{
-						"name": "date",
-						"type": "DATE"
+						"type": "String"
 					},
 					{
-						"name": "amount",
-						"type": "DECIMAL",
-						"precision": 10,
-						"scale": 0
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
 					}
 				]
 			},
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/silver_transformation')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
+			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnHour')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"description": "Cast all columns from bronze tables to silver tables",
-				"type": "MappingDataFlow",
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
 				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "bronze_stations",
-								"type": "DatasetReference"
-							},
-							"name": "stations"
-						},
-						{
-							"dataset": {
-								"referenceName": "bronze_payments",
-								"type": "DatasetReference"
-							},
-							"name": "payments"
-						},
-						{
-							"dataset": {
-								"referenceName": "bronze_riders",
-								"type": "DatasetReference"
-							},
-							"name": "riders"
-						},
-						{
-							"dataset": {
-								"referenceName": "bronze_trips",
-								"type": "DatasetReference"
-							},
-							"name": "trips"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "silver_stations",
-								"type": "DatasetReference"
-							},
-							"name": "sinkStations"
-						},
-						{
-							"dataset": {
-								"referenceName": "silver_payments",
-								"type": "DatasetReference"
-							},
-							"name": "sinkPayments"
-						},
-						{
-							"dataset": {
-								"referenceName": "silver_riders",
-								"type": "DatasetReference"
-							},
-							"name": "sinkRiders"
-						},
-						{
-							"dataset": {
-								"referenceName": "silver_trips",
-								"type": "DatasetReference"
-							},
-							"name": "sinkTrips"
-						}
-					],
-					"transformations": [
-						{
-							"name": "castStations"
-						},
-						{
-							"name": "castPayments"
-						},
-						{
-							"name": "castRiders"
-						},
-						{
-							"name": "castTrips"
-						},
-						{
-							"name": "select1"
-						},
-						{
-							"name": "select2"
-						},
-						{
-							"name": "select3"
-						},
-						{
-							"name": "select4"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          {1} as string,",
-						"          {2} as string,",
-						"          {3} as string,",
-						"          {4} as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> stations",
-						"source(output(",
-						"          {1} as string,",
-						"          {2} as string,",
-						"          {3} as string,",
-						"          {4} as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> payments",
-						"source(output(",
-						"          {1} as string,",
-						"          {2} as string,",
-						"          {3} as string,",
-						"          {4} as string,",
-						"          {5} as string,",
-						"          {6} as string,",
-						"          {7} as string,",
-						"          {8} as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> riders",
-						"source(output(",
-						"          {1} as string,",
-						"          {2} as string,",
-						"          {3} as string,",
-						"          {4} as string,",
-						"          {5} as string,",
-						"          {6} as string,",
-						"          {7} as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> trips",
-						"stations cast(output(",
-						"          {1} as string,",
-						"          {2} as string,",
-						"          {3} as float,",
-						"          {4} as float",
-						"     ),",
-						"     errors: true) ~> castStations",
-						"payments cast(output(",
-						"          {1} as integer,",
-						"          {2} as date 'yyyy-MM-dd',",
-						"          {3} as decimal(10,0),",
-						"          {4} as integer",
-						"     ),",
-						"     errors: true) ~> castPayments",
-						"riders cast(output(",
-						"          {1} as integer,",
-						"          {2} as string,",
-						"          {3} as string,",
-						"          {4} as string,",
-						"          {5} as date 'yyyy-MM-dd',",
-						"          {6} as date 'yyyy-MM-dd',",
-						"          {7} as date 'yyyy-MM-dd',",
-						"          {8} as boolean",
-						"     ),",
-						"     errors: true) ~> castRiders",
-						"trips cast(output(",
-						"          {1} as string,",
-						"          {2} as string,",
-						"          {3} as timestamp 'dd/MM/yyyy HH:mm',",
-						"          {4} as timestamp 'dd/MM/yyyy HH:mm',",
-						"          {5} as string,",
-						"          {6} as string,",
-						"          {7} as integer",
-						"     ),",
-						"     errors: true) ~> castTrips",
-						"castStations select(mapColumn(",
-						"          station_id = {1},",
-						"          name = {2},",
-						"          latitude = {3},",
-						"          longitude = {4}",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> select1",
-						"castPayments select(mapColumn(",
-						"          payment_id = {1},",
-						"          date = {2},",
-						"          amount = {3},",
-						"          rider_id = {4}",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> select2",
-						"castRiders select(mapColumn(",
-						"          rider_id = {1},",
-						"          first_name = {2},",
-						"          last_name = {3},",
-						"          address = {4},",
-						"          birthday = {5},",
-						"          account_start_date = {6},",
-						"          account_end_date = {7},",
-						"          is_member = {8}",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> select3",
-						"castTrips select(mapColumn(",
-						"          trip_id = {1},",
-						"          rideable_type = {2},",
-						"          started_at = {3},",
-						"          ended_at = {4},",
-						"          start_station_id = {5},",
-						"          end_station_id = {6},",
-						"          rider_id = {7}",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> select4",
-						"select1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     format: 'parquet',",
-						"     truncate: true,",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> sinkStations",
-						"select2 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     format: 'parquet',",
-						"     truncate: true,",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> sinkPayments",
-						"select3 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     format: 'parquet',",
-						"     truncate: true,",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> sinkRiders",
-						"select4 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     format: 'parquet',",
-						"     truncate: true,",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> sinkTrips"
-					]
+					"schema": "",
+					"table": "TimeSpentPerRideBasedOnHour"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnDayOfWeek')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "TimeSpentPerRideBasedOnDayOfWeek"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentRidingBasedOnDepartureStation')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "TimeSpentRidingBasedOnDepartureStation"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnArrivalStation')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "TimeSpentPerRideBasedOnArrivalStation"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnJourney')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "TimeSpentPerRideBasedOnJourney"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentRidingBasedOnAgeOfRider')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "TimeSpentRidingBasedOnAgeOfRider"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentRidingBasedOnMemberStatus')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "TimeSpentRidingBasedOnMemberStatus"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RevenuePerMonth')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "RevenuePerMonth"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RevenuePerYear')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "RevenuePerYear"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RevenuePerQuarter')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "RevenuePerQuarter"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RevenueBasedOnMembershipAndAge')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "RevenueBasedOnMembershipAndAge"
 				}
 			},
 			"dependsOn": []
@@ -668,581 +651,504 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/dim_trip_date')]",
-				"[concat(variables('factoryId'), '/datasets/fact_trip')]",
-				"[concat(variables('factoryId'), '/datasets/fact_transaction')]"
+				"[concat(variables('factoryId'), '/datasets/silver_stations')]",
+				"[concat(variables('factoryId'), '/datasets/silver_trips')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Medallion-Basic')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
+			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnHour')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"activities": [
-					{
-						"name": "payments_ingestion",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "dim_trip_date",
+								"type": "DatasetReference"
 							},
-							"sink": {
-								"type": "ParquetSink",
-								"storeSettings": {
-									"type": "AzureBlobStorageWriteSettings"
-								},
-								"formatSettings": {
-									"type": "ParquetWriteSettings"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 1
-										},
-										"sink": {
-											"name": "1"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 2
-										},
-										"sink": {
-											"name": "2"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 3
-										},
-										"sink": {
-											"name": "3"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 4
-										},
-										"sink": {
-											"name": "4"
-										}
-									}
-								],
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "payments",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "bronze_payments",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "riders_ingestion",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"sink": {
-								"type": "ParquetSink",
-								"storeSettings": {
-									"type": "AzureBlobStorageWriteSettings"
-								},
-								"formatSettings": {
-									"type": "ParquetWriteSettings"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 1
-										},
-										"sink": {
-											"name": "1"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 2
-										},
-										"sink": {
-											"name": "2"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 3
-										},
-										"sink": {
-											"name": "3"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 4
-										},
-										"sink": {
-											"name": "4"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 5
-										},
-										"sink": {
-											"name": "5"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 6
-										},
-										"sink": {
-											"name": "6"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 7
-										},
-										"sink": {
-											"name": "7"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 8
-										},
-										"sink": {
-											"name": "8"
-										}
-									}
-								],
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "riders",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "bronze_riders",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "stations_ingestion",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"sink": {
-								"type": "ParquetSink",
-								"storeSettings": {
-									"type": "AzureBlobStorageWriteSettings"
-								},
-								"formatSettings": {
-									"type": "ParquetWriteSettings"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 1
-										},
-										"sink": {
-											"name": "1"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 2
-										},
-										"sink": {
-											"name": "2"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 3
-										},
-										"sink": {
-											"name": "3"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 4
-										},
-										"sink": {
-											"name": "4"
-										}
-									}
-								],
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "stations",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "bronze_stations",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "trips_ingestion",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"sink": {
-								"type": "ParquetSink",
-								"storeSettings": {
-									"type": "AzureBlobStorageWriteSettings"
-								},
-								"formatSettings": {
-									"type": "ParquetWriteSettings"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 1
-										},
-										"sink": {
-											"name": "1"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 2
-										},
-										"sink": {
-											"name": "2"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 3
-										},
-										"sink": {
-											"name": "3"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 4
-										},
-										"sink": {
-											"name": "4"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 5
-										},
-										"sink": {
-											"name": "5"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 6
-										},
-										"sink": {
-											"name": "6"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 7
-										},
-										"sink": {
-											"name": "7"
-										}
-									}
-								],
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "trips",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "bronze_trips",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "silver_transformation",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [
-							{
-								"activity": "payments_ingestion",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							},
-							{
-								"activity": "riders_ingestion",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							},
-							{
-								"activity": "stations_ingestion",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							},
-							{
-								"activity": "trips_ingestion",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "silver_transformation",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"stations": {},
-									"payments": {},
-									"riders": {},
-									"trips": {},
-									"sinkStations": {},
-									"sinkPayments": {},
-									"sinkRiders": {},
-									"sinkTrips": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
+							"name": "dimTripDate"
 						}
-					},
-					{
-						"name": "golden_transformation",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [
-							{
-								"activity": "silver_transformation",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "golden_transformation",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"stations": {},
-									"payments": {},
-									"riders": {},
-									"trips": {},
-									"paymentsDimension": {},
-									"stationsDimension": {},
-									"ridersDimension": {},
-									"rideableDimension": {},
-									"tripDateDimension": {},
-									"factTrip": {},
-									"transactionFact": {}
-								}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "TimeSpentPerRideBasedOnHour",
+								"type": "DatasetReference"
 							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
+							"name": "sink1"
 						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"annotations": []
+					],
+					"transformations": [
+						{
+							"name": "groupByDate"
+						},
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          trip_id as string,",
+						"          started_at as timestamp,",
+						"          ended_at as timestamp,",
+						"          duration_secs as double",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> dimTripDate",
+						"derivedColumn1 aggregate(groupBy(hour),",
+						"     amount = sum(duration_secs)) ~> groupByDate",
+						"dimTripDate derive(hour = hour(started_at)) ~> derivedColumn1",
+						"groupByDate sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/silver_transformation')]",
-				"[concat(variables('factoryId'), '/dataflows/golden_transformation')]"
+				"[concat(variables('factoryId'), '/datasets/TimeSpentPerRideBasedOnHour')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/silver_transformation')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Cast all columns from bronze tables to silver tables",
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "bronze_stations",
+								"type": "DatasetReference"
+							},
+							"name": "stations"
+						},
+						{
+							"dataset": {
+								"referenceName": "bronze_payments",
+								"type": "DatasetReference"
+							},
+							"name": "payments"
+						},
+						{
+							"dataset": {
+								"referenceName": "bronze_riders",
+								"type": "DatasetReference"
+							},
+							"name": "riders"
+						},
+						{
+							"dataset": {
+								"referenceName": "bronze_trips",
+								"type": "DatasetReference"
+							},
+							"name": "trips"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "silver_stations",
+								"type": "DatasetReference"
+							},
+							"name": "sinkStations"
+						},
+						{
+							"dataset": {
+								"referenceName": "silver_payments",
+								"type": "DatasetReference"
+							},
+							"name": "sinkPayments"
+						},
+						{
+							"dataset": {
+								"referenceName": "silver_riders",
+								"type": "DatasetReference"
+							},
+							"name": "sinkRiders"
+						},
+						{
+							"dataset": {
+								"referenceName": "silver_trips",
+								"type": "DatasetReference"
+							},
+							"name": "sinkTrips"
+						}
+					],
+					"transformations": [
+						{
+							"name": "castStations"
+						},
+						{
+							"name": "castPayments"
+						},
+						{
+							"name": "castRiders"
+						},
+						{
+							"name": "castTrips"
+						},
+						{
+							"name": "select1"
+						},
+						{
+							"name": "select2"
+						},
+						{
+							"name": "select3"
+						},
+						{
+							"name": "select4"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          {1} as string,",
+						"          {2} as string,",
+						"          {3} as string,",
+						"          {4} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> stations",
+						"source(output(",
+						"          {1} as string,",
+						"          {2} as string,",
+						"          {3} as string,",
+						"          {4} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> payments",
+						"source(output(",
+						"          {1} as string,",
+						"          {2} as string,",
+						"          {3} as string,",
+						"          {4} as string,",
+						"          {5} as string,",
+						"          {6} as string,",
+						"          {7} as string,",
+						"          {8} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> riders",
+						"source(output(",
+						"          {1} as string,",
+						"          {2} as string,",
+						"          {3} as string,",
+						"          {4} as string,",
+						"          {5} as string,",
+						"          {6} as string,",
+						"          {7} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> trips",
+						"stations cast(output(",
+						"          {1} as string,",
+						"          {2} as string,",
+						"          {3} as float,",
+						"          {4} as float",
+						"     ),",
+						"     errors: true) ~> castStations",
+						"payments cast(output(",
+						"          {1} as integer,",
+						"          {2} as date 'yyyy-MM-dd',",
+						"          {3} as decimal(10,0),",
+						"          {4} as integer",
+						"     ),",
+						"     errors: true) ~> castPayments",
+						"riders cast(output(",
+						"          {1} as integer,",
+						"          {2} as string,",
+						"          {3} as string,",
+						"          {4} as string,",
+						"          {5} as date 'yyyy-MM-dd',",
+						"          {6} as date 'yyyy-MM-dd',",
+						"          {7} as date 'yyyy-MM-dd',",
+						"          {8} as boolean",
+						"     ),",
+						"     errors: true) ~> castRiders",
+						"trips cast(output(",
+						"          {1} as string,",
+						"          {2} as string,",
+						"          {3} as timestamp 'dd/MM/yyyy HH:mm',",
+						"          {4} as timestamp 'dd/MM/yyyy HH:mm',",
+						"          {5} as string,",
+						"          {6} as string,",
+						"          {7} as integer",
+						"     ),",
+						"     errors: true) ~> castTrips",
+						"castStations select(mapColumn(",
+						"          station_id = {1},",
+						"          name = {2},",
+						"          latitude = {3},",
+						"          longitude = {4}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"castPayments select(mapColumn(",
+						"          payment_id = {1},",
+						"          date = {2},",
+						"          amount = {3},",
+						"          rider_id = {4}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select2",
+						"castRiders select(mapColumn(",
+						"          rider_id = {1},",
+						"          first_name = {2},",
+						"          last_name = {3},",
+						"          address = {4},",
+						"          birthday = {5},",
+						"          account_start_date = {6},",
+						"          account_end_date = {7},",
+						"          is_member = {8}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select3",
+						"castTrips select(mapColumn(",
+						"          trip_id = {1},",
+						"          rideable_type = {2},",
+						"          started_at = {3},",
+						"          ended_at = {4},",
+						"          start_station_id = {5},",
+						"          end_station_id = {6},",
+						"          rider_id = {7}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select4",
+						"select1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     truncate: true,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> sinkStations",
+						"select2 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     truncate: true,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> sinkPayments",
+						"select3 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     truncate: true,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> sinkRiders",
+						"select4 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     truncate: true,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> sinkTrips"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/silver_stations')]",
+				"[concat(variables('factoryId'), '/datasets/silver_trips')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnDayOfWeek')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "dim_trip_date",
+								"type": "DatasetReference"
+							},
+							"name": "dimTripDate"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "TimeSpentPerRideBasedOnDayOfWeek",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "groupByDate"
+						},
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          trip_id as string,",
+						"          started_at as timestamp,",
+						"          ended_at as timestamp,",
+						"          duration_secs as double",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> dimTripDate",
+						"derivedColumn1 aggregate(groupBy(DayOfWeek),",
+						"     amount = sum(duration_secs)) ~> groupByDate",
+						"dimTripDate derive(DayOfWeek = case(\r",
+						"    dayOfWeek(toDate(started_at)) == 1, 'Sunday', \r",
+						"    dayOfWeek(toDate(started_at)) == 2, 'Monday',\r",
+						"    dayOfWeek(toDate(started_at)) == 3, 'Tuesday', \r",
+						"    dayOfWeek(toDate(started_at)) == 4, 'Wednesday', \r",
+						"    dayOfWeek(toDate(started_at)) == 5, 'Thursday', \r",
+						"    dayOfWeek(toDate(started_at)) == 6, 'Friday', \r",
+						"    dayOfWeek(toDate(started_at)) == 7, 'Saturday', \r",
+						"    ''\r",
+						")) ~> derivedColumn1",
+						"groupByDate sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/TimeSpentPerRideBasedOnDayOfWeek')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnDepartureStation')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "dim_stations",
+								"type": "DatasetReference"
+							},
+							"name": "dimStation"
+						},
+						{
+							"dataset": {
+								"referenceName": "fact_trip",
+								"type": "DatasetReference"
+							},
+							"name": "factTrip"
+						},
+						{
+							"dataset": {
+								"referenceName": "dim_trip_date",
+								"type": "DatasetReference"
+							},
+							"name": "dimTripDate"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "TimeSpentRidingBasedOnDepartureStation",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "join2"
+						},
+						{
+							"name": "join3"
+						},
+						{
+							"name": "aggregate1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          station_id as string,",
+						"          name as string,",
+						"          latitude as float,",
+						"          longitude as float",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> dimStation",
+						"source(output(",
+						"          rideable_type_id as long,",
+						"          trip_id as string,",
+						"          start_station_id as string,",
+						"          end_station_id as string,",
+						"          rider_id as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> factTrip",
+						"source(output(",
+						"          trip_id as string,",
+						"          started_at as timestamp,",
+						"          ended_at as timestamp,",
+						"          duration_secs as double",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> dimTripDate",
+						"factTrip, dimTripDate join(factTrip@trip_id == dimTripDate@trip_id,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join2",
+						"join2, dimStation join(start_station_id == station_id,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join3",
+						"join3 aggregate(groupBy(station_id),",
+						"     {sum(duration_secs)} = sum(duration_secs)) ~> aggregate1",
+						"aggregate1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/TimeSpentRidingBasedOnDepartureStation')]"
 			]
 		}
 	]
