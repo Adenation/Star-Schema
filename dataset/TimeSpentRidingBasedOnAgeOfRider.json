@@ -1,0 +1,16 @@
+{
+	"name": "TimeSpentRidingBasedOnAgeOfRider",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AdenStarSchemaDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "",
+			"table": "TimeSpentRidingBasedOnAgeOfRider"
+		}
+	}
+}
