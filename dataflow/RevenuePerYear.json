@@ -1,0 +1,59 @@
+{
+	"name": "RevenuePerYear",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "dim_payment",
+						"type": "DatasetReference"
+					},
+					"name": "dimPayment"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "RevenuePerYear",
+						"type": "DatasetReference"
+					},
+					"name": "sink1",
+					"description": "Export data to RevenuePerYear"
+				}
+			],
+			"transformations": [
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          payment_id as integer,",
+				"          date as date,",
+				"          amount as decimal(10,0)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> dimPayment",
+				"derivedColumn1 aggregate(groupBy(year),",
+				"     {sum(amount)} = sum(amount)) ~> aggregate1",
+				"dimPayment derive(year = year(date)) ~> derivedColumn1",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}
