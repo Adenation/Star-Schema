@@ -1,0 +1,15 @@
+{
+	"name": "RevenueBasedOnMembershipAndAge",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AdenStarSchemaDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"table": "RevenueBasedOnMembershipAndAge"
+		}
+	}
+}
