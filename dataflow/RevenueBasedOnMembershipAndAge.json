@@ -1,0 +1,114 @@
+{
+	"name": "RevenueBasedOnMembershipAndAge",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "dim_payment",
+						"type": "DatasetReference"
+					},
+					"name": "dimPayment"
+				},
+				{
+					"dataset": {
+						"referenceName": "fact_transaction",
+						"type": "DatasetReference"
+					},
+					"name": "factTransaction"
+				},
+				{
+					"dataset": {
+						"referenceName": "dim_rider",
+						"type": "DatasetReference"
+					},
+					"name": "dimRider"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "RevenueBasedOnMembershipAndAge",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "join1"
+				},
+				{
+					"name": "join2"
+				},
+				{
+					"name": "filter1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "aggregate1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          payment_id as integer,",
+				"          date as date,",
+				"          amount as decimal(10,0)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> dimPayment",
+				"source(output(",
+				"          payment_id as integer,",
+				"          rider_id as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> factTransaction",
+				"source(output(",
+				"          rider_id as integer,",
+				"          first_name as string,",
+				"          last_name as string,",
+				"          address as string,",
+				"          birthday as date,",
+				"          account_start_date as date,",
+				"          account_end_date as date,",
+				"          is_member as boolean",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> dimRider",
+				"factTransaction, dimPayment join(factTransaction@payment_id == dimPayment@payment_id,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1, dimRider join(factTransaction@rider_id == dimRider@rider_id,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join2",
+				"join2 filter(is_member == true()) ~> filter1",
+				"filter1 derive(age_at_joining = floor(minus(account_start_date, birthday)/365.25)) ~> derivedColumn1",
+				"derivedColumn1 aggregate(groupBy(age_at_joining),",
+				"     {sum(amount)} = sum(amount)) ~> aggregate1",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}
