@@ -1,0 +1,106 @@
+{
+	"name": "TimeSpentPerRideBasedOnArrivalStation",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "dim_stations",
+						"type": "DatasetReference"
+					},
+					"name": "dimStation"
+				},
+				{
+					"dataset": {
+						"referenceName": "fact_trip",
+						"type": "DatasetReference"
+					},
+					"name": "factTrip"
+				},
+				{
+					"dataset": {
+						"referenceName": "dim_trip_date",
+						"type": "DatasetReference"
+					},
+					"name": "dimTripDate"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "TimeSpentPerRideBasedOnArrivalStation",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "join2"
+				},
+				{
+					"name": "join3"
+				},
+				{
+					"name": "aggregate1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          station_id as string,",
+				"          name as string,",
+				"          latitude as float,",
+				"          longitude as float",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> dimStation",
+				"source(output(",
+				"          rideable_type_id as long,",
+				"          trip_id as string,",
+				"          start_station_id as string,",
+				"          end_station_id as string,",
+				"          rider_id as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> factTrip",
+				"source(output(",
+				"          trip_id as string,",
+				"          started_at as timestamp,",
+				"          ended_at as timestamp,",
+				"          duration_secs as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> dimTripDate",
+				"factTrip, dimTripDate join(factTrip@trip_id == dimTripDate@trip_id,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join2",
+				"join2, dimStation join(end_station_id == station_id,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join3",
+				"join3 aggregate(groupBy(station_id),",
+				"     {sum(duration_secs)} = sum(duration_secs)) ~> aggregate1",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}
