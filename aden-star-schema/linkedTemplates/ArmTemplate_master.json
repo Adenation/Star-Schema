@@ -9,7 +9,8 @@
 		},
 		"AdenStarSchemaDB_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AdenStarSchemaDB'"
+			"metadata": "Secure string for 'connectionString' of 'AdenStarSchemaDB'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=adenqualyfi.database.windows.net;Initial Catalog=AdenStarSchemaDB"
 		},
 		"adenAzureBlobStorage1_connectionString": {
 			"type": "secureString",
@@ -18,6 +19,10 @@
 		"adenGitHub1_credential": {
 			"type": "secureString",
 			"metadata": "Secure string for 'credential' of 'adenGitHub1'"
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://adenstarschemakeyvault.vault.azure.net/"
 		},
 		"adenGitHub1_properties_typeProperties_username": {
 			"type": "string",
@@ -50,14 +55,14 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"AdenStarSchemaDB_connectionString": {
-						"value": "[parameters('AdenStarSchemaDB_connectionString')]"
-					},
 					"adenAzureBlobStorage1_connectionString": {
 						"value": "[parameters('adenAzureBlobStorage1_connectionString')]"
 					},
 					"adenGitHub1_credential": {
 						"value": "[parameters('adenGitHub1_credential')]"
+					},
+					"AzureKeyVault1_properties_typeProperties_baseUrl": {
+						"value": "[parameters('AzureKeyVault1_properties_typeProperties_baseUrl')]"
 					},
 					"adenGitHub1_properties_typeProperties_username": {
 						"value": "[parameters('adenGitHub1_properties_typeProperties_username')]"
@@ -79,6 +84,9 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"AdenStarSchemaDB_connectionString": {
+						"value": "[parameters('AdenStarSchemaDB_connectionString')]"
 					}
 				}
 			},

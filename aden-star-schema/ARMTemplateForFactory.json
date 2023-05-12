@@ -9,7 +9,8 @@
 		},
 		"AdenStarSchemaDB_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AdenStarSchemaDB'"
+			"metadata": "Secure string for 'connectionString' of 'AdenStarSchemaDB'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=adenqualyfi.database.windows.net;Initial Catalog=AdenStarSchemaDB"
 		},
 		"adenAzureBlobStorage1_connectionString": {
 			"type": "secureString",
@@ -18,6 +19,10 @@
 		"adenGitHub1_credential": {
 			"type": "secureString",
 			"metadata": "Secure string for 'credential' of 'adenGitHub1'"
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://adenstarschemakeyvault.vault.azure.net/"
 		},
 		"adenGitHub1_properties_typeProperties_username": {
 			"type": "string",
@@ -1043,6 +1048,237 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/RevenueBasedOnMembershipAndAge')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "RevenueBasedOnMembershipAndAge"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RevenuePerMonth')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "RevenuePerMonth"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RevenuePerQuarter')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "RevenuePerQuarter"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RevenuePerYear')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "RevenuePerYear"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnArrivalStation')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "TimeSpentPerRideBasedOnArrivalStation"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnDayOfWeek')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "TimeSpentPerRideBasedOnDayOfWeek"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnHour')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "TimeSpentPerRideBasedOnHour"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnJourney')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "TimeSpentPerRideBasedOnJourney"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentRidingBasedOnAgeOfRider')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "TimeSpentRidingBasedOnAgeOfRider"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentRidingBasedOnDepartureStation')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "TimeSpentRidingBasedOnDepartureStation"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentRidingBasedOnMemberStatus')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AdenStarSchemaDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "TimeSpentRidingBasedOnMemberStatus"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/bronze_payments')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1821,6 +2057,25 @@
 				"type": "AzureSqlDatabase",
 				"typeProperties": {
 					"connectionString": "[parameters('AdenStarSchemaDB_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "integrationRuntime1",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureKeyVault1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('AzureKeyVault1_properties_typeProperties_baseUrl')]"
 				}
 			},
 			"dependsOn": []
@@ -1861,6 +2116,1069 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/integrationRuntime1')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "AutoResolve",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 10,
+							"cleanup": false,
+							"customProperties": []
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RevenueBasedOnMembershipAndAge')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "dim_payment",
+								"type": "DatasetReference"
+							},
+							"name": "dimPayment"
+						},
+						{
+							"dataset": {
+								"referenceName": "fact_transaction",
+								"type": "DatasetReference"
+							},
+							"name": "factTransaction"
+						},
+						{
+							"dataset": {
+								"referenceName": "dim_rider",
+								"type": "DatasetReference"
+							},
+							"name": "dimRider"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "RevenueBasedOnMembershipAndAge",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "join1"
+						},
+						{
+							"name": "join2"
+						},
+						{
+							"name": "filter1"
+						},
+						{
+							"name": "derivedColumn1"
+						},
+						{
+							"name": "aggregate1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          payment_id as integer,",
+						"          date as date,",
+						"          amount as decimal(10,0)",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> dimPayment",
+						"source(output(",
+						"          payment_id as integer,",
+						"          rider_id as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> factTransaction",
+						"source(output(",
+						"          rider_id as integer,",
+						"          first_name as string,",
+						"          last_name as string,",
+						"          address as string,",
+						"          birthday as date,",
+						"          account_start_date as date,",
+						"          account_end_date as date,",
+						"          is_member as boolean",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> dimRider",
+						"factTransaction, dimPayment join(factTransaction@payment_id == dimPayment@payment_id,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join1",
+						"join1, dimRider join(factTransaction@rider_id == dimRider@rider_id,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join2",
+						"join2 filter(is_member == true()) ~> filter1",
+						"filter1 derive(age_at_joining = floor(minus(account_start_date, birthday)/365.25)) ~> derivedColumn1",
+						"derivedColumn1 aggregate(groupBy(age_at_joining),",
+						"     {sum(amount)} = sum(amount)) ~> aggregate1",
+						"aggregate1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/dim_payment')]",
+				"[concat(variables('factoryId'), '/datasets/fact_transaction')]",
+				"[concat(variables('factoryId'), '/datasets/dim_rider')]",
+				"[concat(variables('factoryId'), '/datasets/RevenueBasedOnMembershipAndAge')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RevenuePerMonth')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "dim_payment",
+								"type": "DatasetReference"
+							},
+							"name": "dimPayment"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "RevenuePerMonth",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "aggregate1"
+						},
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          payment_id as integer,",
+						"          date as date,",
+						"          amount as decimal(10,0)",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> dimPayment",
+						"derivedColumn1 aggregate(groupBy(month),",
+						"     {sum(amount)} = sum(amount)) ~> aggregate1",
+						"dimPayment derive(month = month(date)) ~> derivedColumn1",
+						"aggregate1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/dim_payment')]",
+				"[concat(variables('factoryId'), '/datasets/RevenuePerMonth')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RevenuePerQuarter')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "dim_payment",
+								"type": "DatasetReference"
+							},
+							"name": "dimPayment"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "RevenuePerQuarter",
+								"type": "DatasetReference"
+							},
+							"name": "sink1",
+							"description": "Export data to RevenuePerQuarter"
+						}
+					],
+					"transformations": [
+						{
+							"name": "aggregate1"
+						},
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          payment_id as integer,",
+						"          date as date,",
+						"          amount as decimal(10,0)",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> dimPayment",
+						"derivedColumn1 aggregate(groupBy(quarter),",
+						"     {sum(amount)} = sum(amount)) ~> aggregate1",
+						"dimPayment derive(quarter = ceil(month(date)/3)) ~> derivedColumn1",
+						"aggregate1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/dim_payment')]",
+				"[concat(variables('factoryId'), '/datasets/RevenuePerQuarter')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RevenuePerYear')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "dim_payment",
+								"type": "DatasetReference"
+							},
+							"name": "dimPayment"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "RevenuePerYear",
+								"type": "DatasetReference"
+							},
+							"name": "sink1",
+							"description": "Export data to RevenuePerYear"
+						}
+					],
+					"transformations": [
+						{
+							"name": "aggregate1"
+						},
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          payment_id as integer,",
+						"          date as date,",
+						"          amount as decimal(10,0)",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> dimPayment",
+						"derivedColumn1 aggregate(groupBy(year),",
+						"     {sum(amount)} = sum(amount)) ~> aggregate1",
+						"dimPayment derive(year = year(date)) ~> derivedColumn1",
+						"aggregate1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/dim_payment')]",
+				"[concat(variables('factoryId'), '/datasets/RevenuePerYear')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnArrivalStation')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "dim_stations",
+								"type": "DatasetReference"
+							},
+							"name": "dimStation"
+						},
+						{
+							"dataset": {
+								"referenceName": "fact_trip",
+								"type": "DatasetReference"
+							},
+							"name": "factTrip"
+						},
+						{
+							"dataset": {
+								"referenceName": "dim_trip_date",
+								"type": "DatasetReference"
+							},
+							"name": "dimTripDate"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "TimeSpentPerRideBasedOnArrivalStation",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "join2"
+						},
+						{
+							"name": "join3"
+						},
+						{
+							"name": "aggregate1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          station_id as string,",
+						"          name as string,",
+						"          latitude as float,",
+						"          longitude as float",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> dimStation",
+						"source(output(",
+						"          rideable_type_id as long,",
+						"          trip_id as string,",
+						"          start_station_id as string,",
+						"          end_station_id as string,",
+						"          rider_id as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> factTrip",
+						"source(output(",
+						"          trip_id as string,",
+						"          started_at as timestamp,",
+						"          ended_at as timestamp,",
+						"          duration_secs as double",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> dimTripDate",
+						"factTrip, dimTripDate join(factTrip@trip_id == dimTripDate@trip_id,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join2",
+						"join2, dimStation join(end_station_id == station_id,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join3",
+						"join3 aggregate(groupBy(station_id),",
+						"     {sum(duration_secs)} = sum(duration_secs)) ~> aggregate1",
+						"aggregate1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/dim_stations')]",
+				"[concat(variables('factoryId'), '/datasets/fact_trip')]",
+				"[concat(variables('factoryId'), '/datasets/dim_trip_date')]",
+				"[concat(variables('factoryId'), '/datasets/TimeSpentPerRideBasedOnArrivalStation')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnDayOfWeek')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "dim_trip_date",
+								"type": "DatasetReference"
+							},
+							"name": "dimTripDate"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "TimeSpentPerRideBasedOnDayOfWeek",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "groupByDate"
+						},
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          trip_id as string,",
+						"          started_at as timestamp,",
+						"          ended_at as timestamp,",
+						"          duration_secs as double",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> dimTripDate",
+						"derivedColumn1 aggregate(groupBy(DayOfWeek),",
+						"     amount = sum(duration_secs)) ~> groupByDate",
+						"dimTripDate derive(DayOfWeek = case(\r",
+						"    dayOfWeek(toDate(started_at)) == 1, 'Sunday', \r",
+						"    dayOfWeek(toDate(started_at)) == 2, 'Monday',\r",
+						"    dayOfWeek(toDate(started_at)) == 3, 'Tuesday', \r",
+						"    dayOfWeek(toDate(started_at)) == 4, 'Wednesday', \r",
+						"    dayOfWeek(toDate(started_at)) == 5, 'Thursday', \r",
+						"    dayOfWeek(toDate(started_at)) == 6, 'Friday', \r",
+						"    dayOfWeek(toDate(started_at)) == 7, 'Saturday', \r",
+						"    ''\r",
+						")) ~> derivedColumn1",
+						"groupByDate sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/dim_trip_date')]",
+				"[concat(variables('factoryId'), '/datasets/TimeSpentPerRideBasedOnDayOfWeek')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnDepartureStation')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "dim_stations",
+								"type": "DatasetReference"
+							},
+							"name": "dimStation"
+						},
+						{
+							"dataset": {
+								"referenceName": "fact_trip",
+								"type": "DatasetReference"
+							},
+							"name": "factTrip"
+						},
+						{
+							"dataset": {
+								"referenceName": "dim_trip_date",
+								"type": "DatasetReference"
+							},
+							"name": "dimTripDate"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "TimeSpentRidingBasedOnDepartureStation",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "join2"
+						},
+						{
+							"name": "join3"
+						},
+						{
+							"name": "aggregate1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          station_id as string,",
+						"          name as string,",
+						"          latitude as float,",
+						"          longitude as float",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> dimStation",
+						"source(output(",
+						"          rideable_type_id as long,",
+						"          trip_id as string,",
+						"          start_station_id as string,",
+						"          end_station_id as string,",
+						"          rider_id as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> factTrip",
+						"source(output(",
+						"          trip_id as string,",
+						"          started_at as timestamp,",
+						"          ended_at as timestamp,",
+						"          duration_secs as double",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> dimTripDate",
+						"factTrip, dimTripDate join(factTrip@trip_id == dimTripDate@trip_id,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join2",
+						"join2, dimStation join(start_station_id == station_id,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join3",
+						"join3 aggregate(groupBy(station_id),",
+						"     {sum(duration_secs)} = sum(duration_secs)) ~> aggregate1",
+						"aggregate1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/dim_stations')]",
+				"[concat(variables('factoryId'), '/datasets/fact_trip')]",
+				"[concat(variables('factoryId'), '/datasets/dim_trip_date')]",
+				"[concat(variables('factoryId'), '/datasets/TimeSpentRidingBasedOnDepartureStation')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnHour')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "dim_trip_date",
+								"type": "DatasetReference"
+							},
+							"name": "dimTripDate"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "TimeSpentPerRideBasedOnHour",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "groupByDate"
+						},
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          trip_id as string,",
+						"          started_at as timestamp,",
+						"          ended_at as timestamp,",
+						"          duration_secs as double",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> dimTripDate",
+						"derivedColumn1 aggregate(groupBy(hour),",
+						"     amount = sum(duration_secs)) ~> groupByDate",
+						"dimTripDate derive(hour = hour(started_at)) ~> derivedColumn1",
+						"groupByDate sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/dim_trip_date')]",
+				"[concat(variables('factoryId'), '/datasets/TimeSpentPerRideBasedOnHour')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnJourney')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "dim_stations",
+								"type": "DatasetReference"
+							},
+							"name": "dimStation"
+						},
+						{
+							"dataset": {
+								"referenceName": "fact_trip",
+								"type": "DatasetReference"
+							},
+							"name": "factTrip"
+						},
+						{
+							"dataset": {
+								"referenceName": "dim_trip_date",
+								"type": "DatasetReference"
+							},
+							"name": "dimTripDate"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "TimeSpentPerRideBasedOnJourney",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "join2"
+						},
+						{
+							"name": "join3"
+						},
+						{
+							"name": "aggregate1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          station_id as string,",
+						"          name as string,",
+						"          latitude as float,",
+						"          longitude as float",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> dimStation",
+						"source(output(",
+						"          rideable_type_id as long,",
+						"          trip_id as string,",
+						"          start_station_id as string,",
+						"          end_station_id as string,",
+						"          rider_id as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> factTrip",
+						"source(output(",
+						"          trip_id as string,",
+						"          started_at as timestamp,",
+						"          ended_at as timestamp,",
+						"          duration_secs as double",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> dimTripDate",
+						"factTrip, dimTripDate join(factTrip@trip_id == dimTripDate@trip_id,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join2",
+						"join2, dimStation join(end_station_id == station_id,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join3",
+						"join3 aggregate(groupBy(start_station_id,",
+						"          end_station_id),",
+						"     {sum(duration_secs)} = sum(duration_secs)) ~> aggregate1",
+						"aggregate1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/dim_stations')]",
+				"[concat(variables('factoryId'), '/datasets/fact_trip')]",
+				"[concat(variables('factoryId'), '/datasets/dim_trip_date')]",
+				"[concat(variables('factoryId'), '/datasets/TimeSpentPerRideBasedOnJourney')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentRidingBasedOnAgeOfRider')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "dim_trip_date",
+								"type": "DatasetReference"
+							},
+							"name": "dimTripDate"
+						},
+						{
+							"dataset": {
+								"referenceName": "fact_trip",
+								"type": "DatasetReference"
+							},
+							"name": "factTrip"
+						},
+						{
+							"dataset": {
+								"referenceName": "dim_rider",
+								"type": "DatasetReference"
+							},
+							"name": "dimRider"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "TimeSpentRidingBasedOnAgeOfRider",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "join1"
+						},
+						{
+							"name": "join2"
+						},
+						{
+							"name": "aggregate1"
+						},
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          trip_id as string,",
+						"          started_at as timestamp,",
+						"          ended_at as timestamp,",
+						"          duration_secs as double",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> dimTripDate",
+						"source(output(",
+						"          rideable_type_id as long,",
+						"          trip_id as string,",
+						"          start_station_id as string,",
+						"          end_station_id as string,",
+						"          rider_id as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> factTrip",
+						"source(output(",
+						"          rider_id as integer,",
+						"          first_name as string,",
+						"          last_name as string,",
+						"          address as string,",
+						"          birthday as date,",
+						"          account_start_date as date,",
+						"          account_end_date as date,",
+						"          is_member as boolean",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> dimRider",
+						"factTrip, dimTripDate join(factTrip@trip_id == dimTripDate@trip_id,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join1",
+						"join1, dimRider join(factTrip@rider_id == dimRider@rider_id,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join2",
+						"derivedColumn1 aggregate(groupBy(age),",
+						"     {sum(duration_secs)} = sum(duration_secs)) ~> aggregate1",
+						"join2 derive(age = floor(minus(currentDate(), birthday)/365.25)) ~> derivedColumn1",
+						"aggregate1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/dim_trip_date')]",
+				"[concat(variables('factoryId'), '/datasets/fact_trip')]",
+				"[concat(variables('factoryId'), '/datasets/dim_rider')]",
+				"[concat(variables('factoryId'), '/datasets/TimeSpentRidingBasedOnAgeOfRider')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimeSpentRidingBasedOnMemberStatus')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "dim_trip_date",
+								"type": "DatasetReference"
+							},
+							"name": "dimTripDate"
+						},
+						{
+							"dataset": {
+								"referenceName": "fact_trip",
+								"type": "DatasetReference"
+							},
+							"name": "factTrip"
+						},
+						{
+							"dataset": {
+								"referenceName": "dim_rider",
+								"type": "DatasetReference"
+							},
+							"name": "dimRider"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "TimeSpentRidingBasedOnMemberStatus",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "join1"
+						},
+						{
+							"name": "join2"
+						},
+						{
+							"name": "aggregate1"
+						},
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          trip_id as string,",
+						"          started_at as timestamp,",
+						"          ended_at as timestamp,",
+						"          duration_secs as double",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> dimTripDate",
+						"source(output(",
+						"          rideable_type_id as long,",
+						"          trip_id as string,",
+						"          start_station_id as string,",
+						"          end_station_id as string,",
+						"          rider_id as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> factTrip",
+						"source(output(",
+						"          rider_id as integer,",
+						"          first_name as string,",
+						"          last_name as string,",
+						"          address as string,",
+						"          birthday as date,",
+						"          account_start_date as date,",
+						"          account_end_date as date,",
+						"          is_member as boolean",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> dimRider",
+						"factTrip, dimTripDate join(factTrip@trip_id == dimTripDate@trip_id,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join1",
+						"join1, dimRider join(factTrip@rider_id == dimRider@rider_id,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join2",
+						"derivedColumn1 aggregate(groupBy(is_member),",
+						"     {sum(duration_secs)} = sum(duration_secs)) ~> aggregate1",
+						"join2 derive(age = floor(minus(currentDate(), birthday)/365.25)) ~> derivedColumn1",
+						"aggregate1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/dim_trip_date')]",
+				"[concat(variables('factoryId'), '/datasets/fact_trip')]",
+				"[concat(variables('factoryId'), '/datasets/dim_rider')]",
+				"[concat(variables('factoryId'), '/datasets/TimeSpentRidingBasedOnMemberStatus')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/golden_transformation')]",
@@ -2164,71 +3482,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnHour')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "dim_trip_date",
-								"type": "DatasetReference"
-							},
-							"name": "dimTripDate"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "TimeSpentPerRideBasedOnHour",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "groupByDate"
-						},
-						{
-							"name": "derivedColumn1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          trip_id as string,",
-						"          started_at as timestamp,",
-						"          ended_at as timestamp,",
-						"          duration_secs as double",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> dimTripDate",
-						"derivedColumn1 aggregate(groupBy(hour),",
-						"     amount = sum(duration_secs)) ~> groupByDate",
-						"dimTripDate derive(hour = hour(started_at)) ~> derivedColumn1",
-						"groupByDate sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/dim_trip_date')]",
-				"[concat(variables('factoryId'), '/datasets/TimeSpentPerRideBasedOnHour')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/silver_transformation')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -2480,1214 +3733,6 @@
 				"[concat(variables('factoryId'), '/datasets/silver_payments')]",
 				"[concat(variables('factoryId'), '/datasets/silver_riders')]",
 				"[concat(variables('factoryId'), '/datasets/silver_trips')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnHour')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AdenStarSchemaDB",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "",
-					"table": "TimeSpentPerRideBasedOnHour"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnDayOfWeek')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "dim_trip_date",
-								"type": "DatasetReference"
-							},
-							"name": "dimTripDate"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "TimeSpentPerRideBasedOnDayOfWeek",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "groupByDate"
-						},
-						{
-							"name": "derivedColumn1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          trip_id as string,",
-						"          started_at as timestamp,",
-						"          ended_at as timestamp,",
-						"          duration_secs as double",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> dimTripDate",
-						"derivedColumn1 aggregate(groupBy(DayOfWeek),",
-						"     amount = sum(duration_secs)) ~> groupByDate",
-						"dimTripDate derive(DayOfWeek = case(\r",
-						"    dayOfWeek(toDate(started_at)) == 1, 'Sunday', \r",
-						"    dayOfWeek(toDate(started_at)) == 2, 'Monday',\r",
-						"    dayOfWeek(toDate(started_at)) == 3, 'Tuesday', \r",
-						"    dayOfWeek(toDate(started_at)) == 4, 'Wednesday', \r",
-						"    dayOfWeek(toDate(started_at)) == 5, 'Thursday', \r",
-						"    dayOfWeek(toDate(started_at)) == 6, 'Friday', \r",
-						"    dayOfWeek(toDate(started_at)) == 7, 'Saturday', \r",
-						"    ''\r",
-						")) ~> derivedColumn1",
-						"groupByDate sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/dim_trip_date')]",
-				"[concat(variables('factoryId'), '/datasets/TimeSpentPerRideBasedOnDayOfWeek')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnDayOfWeek')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AdenStarSchemaDB",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "",
-					"table": "TimeSpentPerRideBasedOnDayOfWeek"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnDepartureStation')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "dim_stations",
-								"type": "DatasetReference"
-							},
-							"name": "dimStation"
-						},
-						{
-							"dataset": {
-								"referenceName": "fact_trip",
-								"type": "DatasetReference"
-							},
-							"name": "factTrip"
-						},
-						{
-							"dataset": {
-								"referenceName": "dim_trip_date",
-								"type": "DatasetReference"
-							},
-							"name": "dimTripDate"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "TimeSpentRidingBasedOnDepartureStation",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "join2"
-						},
-						{
-							"name": "join3"
-						},
-						{
-							"name": "aggregate1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          station_id as string,",
-						"          name as string,",
-						"          latitude as float,",
-						"          longitude as float",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> dimStation",
-						"source(output(",
-						"          rideable_type_id as long,",
-						"          trip_id as string,",
-						"          start_station_id as string,",
-						"          end_station_id as string,",
-						"          rider_id as integer",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> factTrip",
-						"source(output(",
-						"          trip_id as string,",
-						"          started_at as timestamp,",
-						"          ended_at as timestamp,",
-						"          duration_secs as double",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> dimTripDate",
-						"factTrip, dimTripDate join(factTrip@trip_id == dimTripDate@trip_id,",
-						"     joinType:'inner',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> join2",
-						"join2, dimStation join(start_station_id == station_id,",
-						"     joinType:'inner',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> join3",
-						"join3 aggregate(groupBy(station_id),",
-						"     {sum(duration_secs)} = sum(duration_secs)) ~> aggregate1",
-						"aggregate1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/dim_stations')]",
-				"[concat(variables('factoryId'), '/datasets/fact_trip')]",
-				"[concat(variables('factoryId'), '/datasets/dim_trip_date')]",
-				"[concat(variables('factoryId'), '/datasets/TimeSpentRidingBasedOnDepartureStation')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TimeSpentRidingBasedOnDepartureStation')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AdenStarSchemaDB",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "",
-					"table": "TimeSpentRidingBasedOnDepartureStation"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnArrivalStation')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "dim_stations",
-								"type": "DatasetReference"
-							},
-							"name": "dimStation"
-						},
-						{
-							"dataset": {
-								"referenceName": "fact_trip",
-								"type": "DatasetReference"
-							},
-							"name": "factTrip"
-						},
-						{
-							"dataset": {
-								"referenceName": "dim_trip_date",
-								"type": "DatasetReference"
-							},
-							"name": "dimTripDate"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "TimeSpentPerRideBasedOnArrivalStation",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "join2"
-						},
-						{
-							"name": "join3"
-						},
-						{
-							"name": "aggregate1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          station_id as string,",
-						"          name as string,",
-						"          latitude as float,",
-						"          longitude as float",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> dimStation",
-						"source(output(",
-						"          rideable_type_id as long,",
-						"          trip_id as string,",
-						"          start_station_id as string,",
-						"          end_station_id as string,",
-						"          rider_id as integer",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> factTrip",
-						"source(output(",
-						"          trip_id as string,",
-						"          started_at as timestamp,",
-						"          ended_at as timestamp,",
-						"          duration_secs as double",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> dimTripDate",
-						"factTrip, dimTripDate join(factTrip@trip_id == dimTripDate@trip_id,",
-						"     joinType:'inner',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> join2",
-						"join2, dimStation join(end_station_id == station_id,",
-						"     joinType:'inner',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> join3",
-						"join3 aggregate(groupBy(station_id),",
-						"     {sum(duration_secs)} = sum(duration_secs)) ~> aggregate1",
-						"aggregate1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/dim_stations')]",
-				"[concat(variables('factoryId'), '/datasets/fact_trip')]",
-				"[concat(variables('factoryId'), '/datasets/dim_trip_date')]",
-				"[concat(variables('factoryId'), '/datasets/TimeSpentPerRideBasedOnArrivalStation')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnArrivalStation')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AdenStarSchemaDB",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "",
-					"table": "TimeSpentPerRideBasedOnArrivalStation"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnJourney')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "dim_stations",
-								"type": "DatasetReference"
-							},
-							"name": "dimStation"
-						},
-						{
-							"dataset": {
-								"referenceName": "fact_trip",
-								"type": "DatasetReference"
-							},
-							"name": "factTrip"
-						},
-						{
-							"dataset": {
-								"referenceName": "dim_trip_date",
-								"type": "DatasetReference"
-							},
-							"name": "dimTripDate"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "TimeSpentPerRideBasedOnJourney",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "join2"
-						},
-						{
-							"name": "join3"
-						},
-						{
-							"name": "aggregate1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          station_id as string,",
-						"          name as string,",
-						"          latitude as float,",
-						"          longitude as float",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> dimStation",
-						"source(output(",
-						"          rideable_type_id as long,",
-						"          trip_id as string,",
-						"          start_station_id as string,",
-						"          end_station_id as string,",
-						"          rider_id as integer",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> factTrip",
-						"source(output(",
-						"          trip_id as string,",
-						"          started_at as timestamp,",
-						"          ended_at as timestamp,",
-						"          duration_secs as double",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> dimTripDate",
-						"factTrip, dimTripDate join(factTrip@trip_id == dimTripDate@trip_id,",
-						"     joinType:'inner',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> join2",
-						"join2, dimStation join(end_station_id == station_id,",
-						"     joinType:'inner',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> join3",
-						"join3 aggregate(groupBy(start_station_id,",
-						"          end_station_id),",
-						"     {sum(duration_secs)} = sum(duration_secs)) ~> aggregate1",
-						"aggregate1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/dim_stations')]",
-				"[concat(variables('factoryId'), '/datasets/fact_trip')]",
-				"[concat(variables('factoryId'), '/datasets/dim_trip_date')]",
-				"[concat(variables('factoryId'), '/datasets/TimeSpentPerRideBasedOnJourney')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TimeSpentPerRideBasedOnJourney')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AdenStarSchemaDB",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "",
-					"table": "TimeSpentPerRideBasedOnJourney"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TimeSpentRidingBasedOnAgeOfRider')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "dim_trip_date",
-								"type": "DatasetReference"
-							},
-							"name": "dimTripDate"
-						},
-						{
-							"dataset": {
-								"referenceName": "fact_trip",
-								"type": "DatasetReference"
-							},
-							"name": "factTrip"
-						},
-						{
-							"dataset": {
-								"referenceName": "dim_rider",
-								"type": "DatasetReference"
-							},
-							"name": "dimRider"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "TimeSpentRidingBasedOnAgeOfRider",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "join1"
-						},
-						{
-							"name": "join2"
-						},
-						{
-							"name": "aggregate1"
-						},
-						{
-							"name": "derivedColumn1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          trip_id as string,",
-						"          started_at as timestamp,",
-						"          ended_at as timestamp,",
-						"          duration_secs as double",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> dimTripDate",
-						"source(output(",
-						"          rideable_type_id as long,",
-						"          trip_id as string,",
-						"          start_station_id as string,",
-						"          end_station_id as string,",
-						"          rider_id as integer",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> factTrip",
-						"source(output(",
-						"          rider_id as integer,",
-						"          first_name as string,",
-						"          last_name as string,",
-						"          address as string,",
-						"          birthday as date,",
-						"          account_start_date as date,",
-						"          account_end_date as date,",
-						"          is_member as boolean",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> dimRider",
-						"factTrip, dimTripDate join(factTrip@trip_id == dimTripDate@trip_id,",
-						"     joinType:'inner',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> join1",
-						"join1, dimRider join(factTrip@rider_id == dimRider@rider_id,",
-						"     joinType:'inner',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> join2",
-						"derivedColumn1 aggregate(groupBy(age),",
-						"     {sum(duration_secs)} = sum(duration_secs)) ~> aggregate1",
-						"join2 derive(age = floor(minus(currentDate(), birthday)/365.25)) ~> derivedColumn1",
-						"aggregate1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/dim_trip_date')]",
-				"[concat(variables('factoryId'), '/datasets/fact_trip')]",
-				"[concat(variables('factoryId'), '/datasets/dim_rider')]",
-				"[concat(variables('factoryId'), '/datasets/TimeSpentRidingBasedOnAgeOfRider')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TimeSpentRidingBasedOnAgeOfRider')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AdenStarSchemaDB",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "",
-					"table": "TimeSpentRidingBasedOnAgeOfRider"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TimeSpentRidingBasedOnMemberStatus')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "dim_trip_date",
-								"type": "DatasetReference"
-							},
-							"name": "dimTripDate"
-						},
-						{
-							"dataset": {
-								"referenceName": "fact_trip",
-								"type": "DatasetReference"
-							},
-							"name": "factTrip"
-						},
-						{
-							"dataset": {
-								"referenceName": "dim_rider",
-								"type": "DatasetReference"
-							},
-							"name": "dimRider"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "TimeSpentRidingBasedOnMemberStatus",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "join1"
-						},
-						{
-							"name": "join2"
-						},
-						{
-							"name": "aggregate1"
-						},
-						{
-							"name": "derivedColumn1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          trip_id as string,",
-						"          started_at as timestamp,",
-						"          ended_at as timestamp,",
-						"          duration_secs as double",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> dimTripDate",
-						"source(output(",
-						"          rideable_type_id as long,",
-						"          trip_id as string,",
-						"          start_station_id as string,",
-						"          end_station_id as string,",
-						"          rider_id as integer",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> factTrip",
-						"source(output(",
-						"          rider_id as integer,",
-						"          first_name as string,",
-						"          last_name as string,",
-						"          address as string,",
-						"          birthday as date,",
-						"          account_start_date as date,",
-						"          account_end_date as date,",
-						"          is_member as boolean",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> dimRider",
-						"factTrip, dimTripDate join(factTrip@trip_id == dimTripDate@trip_id,",
-						"     joinType:'inner',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> join1",
-						"join1, dimRider join(factTrip@rider_id == dimRider@rider_id,",
-						"     joinType:'inner',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> join2",
-						"derivedColumn1 aggregate(groupBy(is_member),",
-						"     {sum(duration_secs)} = sum(duration_secs)) ~> aggregate1",
-						"join2 derive(age = floor(minus(currentDate(), birthday)/365.25)) ~> derivedColumn1",
-						"aggregate1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/dim_trip_date')]",
-				"[concat(variables('factoryId'), '/datasets/fact_trip')]",
-				"[concat(variables('factoryId'), '/datasets/dim_rider')]",
-				"[concat(variables('factoryId'), '/datasets/TimeSpentRidingBasedOnMemberStatus')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TimeSpentRidingBasedOnMemberStatus')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AdenStarSchemaDB",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "",
-					"table": "TimeSpentRidingBasedOnMemberStatus"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/RevenuePerMonth')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "dim_payment",
-								"type": "DatasetReference"
-							},
-							"name": "dimPayment"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "RevenuePerMonth",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "aggregate1"
-						},
-						{
-							"name": "derivedColumn1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          payment_id as integer,",
-						"          date as date,",
-						"          amount as decimal(10,0)",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> dimPayment",
-						"derivedColumn1 aggregate(groupBy(month),",
-						"     {sum(amount)} = sum(amount)) ~> aggregate1",
-						"dimPayment derive(month = month(date)) ~> derivedColumn1",
-						"aggregate1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/dim_payment')]",
-				"[concat(variables('factoryId'), '/datasets/RevenuePerMonth')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/RevenuePerMonth')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AdenStarSchemaDB",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "",
-					"table": "RevenuePerMonth"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/RevenuePerYear')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "dim_payment",
-								"type": "DatasetReference"
-							},
-							"name": "dimPayment"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "RevenuePerYear",
-								"type": "DatasetReference"
-							},
-							"name": "sink1",
-							"description": "Export data to RevenuePerYear"
-						}
-					],
-					"transformations": [
-						{
-							"name": "aggregate1"
-						},
-						{
-							"name": "derivedColumn1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          payment_id as integer,",
-						"          date as date,",
-						"          amount as decimal(10,0)",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> dimPayment",
-						"derivedColumn1 aggregate(groupBy(year),",
-						"     {sum(amount)} = sum(amount)) ~> aggregate1",
-						"dimPayment derive(year = year(date)) ~> derivedColumn1",
-						"aggregate1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/dim_payment')]",
-				"[concat(variables('factoryId'), '/datasets/RevenuePerYear')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/RevenuePerQuarter')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "dim_payment",
-								"type": "DatasetReference"
-							},
-							"name": "dimPayment"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "RevenuePerQuarter",
-								"type": "DatasetReference"
-							},
-							"name": "sink1",
-							"description": "Export data to RevenuePerQuarter"
-						}
-					],
-					"transformations": [
-						{
-							"name": "aggregate1"
-						},
-						{
-							"name": "derivedColumn1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          payment_id as integer,",
-						"          date as date,",
-						"          amount as decimal(10,0)",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> dimPayment",
-						"derivedColumn1 aggregate(groupBy(quarter),",
-						"     {sum(amount)} = sum(amount)) ~> aggregate1",
-						"dimPayment derive(quarter = ceil(month(date)/3)) ~> derivedColumn1",
-						"aggregate1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/dim_payment')]",
-				"[concat(variables('factoryId'), '/datasets/RevenuePerQuarter')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/RevenuePerYear')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AdenStarSchemaDB",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "",
-					"table": "RevenuePerYear"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/RevenuePerQuarter')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AdenStarSchemaDB",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "",
-					"table": "RevenuePerQuarter"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/RevenueBasedOnMembershipAndAge')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "dim_payment",
-								"type": "DatasetReference"
-							},
-							"name": "dimPayment"
-						},
-						{
-							"dataset": {
-								"referenceName": "fact_transaction",
-								"type": "DatasetReference"
-							},
-							"name": "factTransaction"
-						},
-						{
-							"dataset": {
-								"referenceName": "dim_rider",
-								"type": "DatasetReference"
-							},
-							"name": "dimRider"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "RevenueBasedOnMembershipAndAge",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "join1"
-						},
-						{
-							"name": "join2"
-						},
-						{
-							"name": "filter1"
-						},
-						{
-							"name": "derivedColumn1"
-						},
-						{
-							"name": "aggregate1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          payment_id as integer,",
-						"          date as date,",
-						"          amount as decimal(10,0)",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> dimPayment",
-						"source(output(",
-						"          payment_id as integer,",
-						"          rider_id as integer",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> factTransaction",
-						"source(output(",
-						"          rider_id as integer,",
-						"          first_name as string,",
-						"          last_name as string,",
-						"          address as string,",
-						"          birthday as date,",
-						"          account_start_date as date,",
-						"          account_end_date as date,",
-						"          is_member as boolean",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> dimRider",
-						"factTransaction, dimPayment join(factTransaction@payment_id == dimPayment@payment_id,",
-						"     joinType:'inner',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> join1",
-						"join1, dimRider join(factTransaction@rider_id == dimRider@rider_id,",
-						"     joinType:'inner',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> join2",
-						"join2 filter(is_member == true()) ~> filter1",
-						"filter1 derive(age_at_joining = floor(minus(account_start_date, birthday)/365.25)) ~> derivedColumn1",
-						"derivedColumn1 aggregate(groupBy(age_at_joining),",
-						"     {sum(amount)} = sum(amount)) ~> aggregate1",
-						"aggregate1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/dim_payment')]",
-				"[concat(variables('factoryId'), '/datasets/fact_transaction')]",
-				"[concat(variables('factoryId'), '/datasets/dim_rider')]",
-				"[concat(variables('factoryId'), '/datasets/RevenueBasedOnMembershipAndAge')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/RevenueBasedOnMembershipAndAge')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AdenStarSchemaDB",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "",
-					"table": "RevenueBasedOnMembershipAndAge"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AdenStarSchemaDB')]"
 			]
 		}
 	]

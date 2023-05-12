@@ -6,13 +6,16 @@
 			"value": "aden-star-schema"
 		},
 		"AdenStarSchemaDB_connectionString": {
-			"value": ""
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=adenqualyfi.database.windows.net;Initial Catalog=AdenStarSchemaDB"
 		},
 		"adenAzureBlobStorage1_connectionString": {
 			"value": ""
 		},
 		"adenGitHub1_credential": {
 			"value": ""
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"value": "https://adenstarschemakeyvault.vault.azure.net/"
 		},
 		"adenGitHub1_properties_typeProperties_username": {
 			"value": "Adenation"
