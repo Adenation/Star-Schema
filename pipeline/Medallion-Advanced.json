@@ -33,7 +33,7 @@
 						"storeSettings": {
 							"type": "AzureBlobStorageWriteSettings",
 							"copyBehavior": {
-								"value": "@concat('bronze/', pipeline().parameters.folderName)",
+								"value": "@concat('bronze/tables/', pipeline().parameters.folderName)",
 								"type": "Expression"
 							}
 						},
